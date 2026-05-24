@@ -1,0 +1,957 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACY2Book — 2026 Departure Futures</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0a0a0f; --dark: #13131a; --card: #1f1f2e; --border: #2a2a3d;
+  --green: #00c853; --red: #ff3b30; --gold: #f5a623; --blue: #3b82f6;
+  --text: #e8e8f0; --muted: #8888aa; --pill: #252535;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden;}
+input,button{font-family:inherit;}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
+.nav{background:#0d0d14;border-bottom:1px solid var(–border);padding:0 14px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:200;}
+.logo{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:22px;letter-spacing:1px;color:#fff;cursor:pointer;}
+.logo span{color:var(–green);}
+.nav-pills{display:flex;gap:3px;}
+.npill{background:var(–pill);border:1px solid var(–border);color:var(–muted);font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:12px;padding:5px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase;transition:all .15s;}
+.npill.active,.npill:hover{background:var(–green);color:#000;border-color:var(–green);}
+.npill.ghost{color:#444;font-size:11px;padding:5px 7px;}
+.npill.ghost:hover{color:var(–muted);background:var(–pill);}
+.live-badge{display:flex;align-items:center;gap:5px;background:rgba(255,59,48,.15);border:1px solid var(–red);color:var(–red);font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:11px;padding:4px 8px;border-radius:4px;}
+.live-dot{width:6px;height:6px;background:var(–red);border-radius:50%;animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+/* TABS */
+.tab{display:none;} .tab.active{display:block;}
+/* HERO */
+.hero{background:linear-gradient(180deg,#131320 0%,var(–black) 100%);border-bottom:1px solid var(–border);padding:18px 14px 14px;}
+.sport-tag{background:var(–green);color:#000;font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:11px;letter-spacing:1px;padding:2px 8px;border-radius:3px;text-transform:uppercase;display:inline-block;margin-bottom:6px;}
+.hero h1{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:26px;letter-spacing:.5px;line-height:1.1;margin-bottom:6px;}
+.hero-sub{color:var(–muted);font-size:13px;display:flex;gap:14px;flex-wrap:wrap;}
+.hero-sub strong{color:var(–green);}
+/* SECTION LABEL */
+.section-label{padding:14px 14px 8px;font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(–muted);display:flex;align-items:center;gap:8px;}
+.section-label::after{content:’’;flex:1;height:1px;background:var(–border);}
+/* ODDS LIST */
+.odds-list{padding:0 14px;display:flex;flex-direction:column;gap:2px;}
+/* PLAYER CARD */
+.pcard{background:var(–card);border:1px solid var(–border);border-radius:6px;overflow:hidden;transition:border-color .2s;}
+.pcard:hover{border-color:#3a3a55;}
+.pcard.confirmed{border-color:rgba(255,59,48,.3);opacity:.88;}
+.pcard.lock{border-color:rgba(245,166,35,.3);background:linear-gradient(135deg,#1f1f2e,#1d1a2a);}
+.pcard.syd{border-color:rgba(0,200,83,.35);}
+.card-main{display:flex;align-items:center;padding:12px 14px;gap:12px;cursor:pointer;}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(–pill);display:flex;align-items:center;justify-content:center;font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:15px;flex-shrink:0;border:2px solid var(–border);position:relative;}
+.pcard.confirmed .avatar{border-color:var(–red);}
+.pcard.lock .avatar{border-color:var(–gold);}
+.pcard.syd .avatar{border-color:var(–green);background:linear-gradient(135deg,#003d1a,#001a0a);}
+.status-dot{position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;border:2px solid var(–card);}
+.dot-hot{background:var(–red);} .dot-warm{background:var(–gold);} .dot-cold{background:var(–blue);} .dot-gone{background:#555;}
+.player-info{flex:1;min-width:0;}
+.player-name{font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:17px;line-height:1;margin-bottom:3px;display:flex;align-items:center;gap:5px;}
+.player-tags{display:flex;gap:4px;flex-wrap:wrap;}
+.tag{background:var(–pill);border:1px solid var(–border);color:var(–muted);font-size:10px;font-weight:600;letter-spacing:.3px;padding:2px 6px;border-radius:3px;text-transform:uppercase;}
+.tag.hot{border-color:rgba(255,59,48,.5);color:#ff6b63;background:rgba(255,59,48,.1);}
+.tag.confirmed{border-color:rgba(255,59,48,.5);color:#ff6b63;background:rgba(255,59,48,.1);}
+.tag.breaking{border-color:rgba(245,166,35,.5);color:var(–gold);background:rgba(245,166,35,.1);animation:blink 1.5s infinite;}
+.tag.friend{border-color:rgba(0,200,83,.5);color:var(–green);background:rgba(0,200,83,.1);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+/* ODDS BTN */
+.odds-btn{border-radius:6px;padding:8px 12px;text-align:center;cursor:pointer;min-width:70px;flex-shrink:0;transition:all .15s;user-select:none;}
+.odds-btn:hover:not(.dead){transform:scale(1.05);}
+.odds-btn.neg{background:#2d1a1a;border:1px solid #4e2a2a;}
+.odds-btn.neg:hover{border-color:var(–red);box-shadow:0 0 10px rgba(255,59,48,.2);}
+.odds-btn.pos{background:#1a2d1a;border:1px solid #2a4e2a;}
+.odds-btn.pos:hover{border-color:var(–green);box-shadow:0 0 10px rgba(0,200,83,.2);}
+.odds-btn.lockbtn{background:#2a2310;border:1px solid #4e3f10;}
+.odds-btn.dead{background:#1a0a0a;border:1px solid #4e0a0a;cursor:not-allowed;}
+.odds-btn.selected{outline:2px solid var(–green);outline-offset:2px;}
+.odds-label{font-size:10px;font-weight:600;color:var(–muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px;}
+.odds-num{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:21px;line-height:1;}
+.odds-btn.neg .odds-num{color:var(–red);}
+.odds-btn.pos .odds-num{color:var(–green);}
+.odds-btn.lockbtn .odds-num{color:var(–gold);font-size:17px;}
+.odds-btn.dead .odds-num{color:#ff2020;font-size:16px;}
+.odds-btn.flash-up{animation:flash-up .5s ease-out;}
+.odds-btn.flash-down{animation:flash-down .5s ease-out;}
+@keyframes flash-up{0%{background:rgba(0,200,83,.35)}100%{background:transparent}}
+@keyframes flash-down{0%{background:rgba(255,59,48,.35)}100%{background:transparent}}
+/* EXPAND */
+.expand-toggle{width:100%;background:none;border:none;cursor:pointer;padding:4px 14px 8px;color:var(–muted);font-size:11px;font-weight:600;letter-spacing:.5px;text-align:center;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:5px;transition:color .15s;}
+.expand-toggle:hover{color:var(–text);}
+.card-expand{border-top:1px solid var(–border);background:rgba(0,0,0,.2);padding:10px 14px;display:none;}
+.pcard.open .card-expand{display:block;}
+.analysis-text{font-size:13px;color:var(–muted);line-height:1.6;margin-bottom:10px;}
+.prop-row{display:flex;align-items:center;justify-content:space-between;padding:6px 6px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;border-radius:4px;transition:background .15s;}
+.prop-row:hover{background:rgba(255,255,255,.04);}
+.prop-row:last-child{border-bottom:none;}
+.prop-label{font-size:12px;color:var(–text);flex:1;}
+.prop-odds{font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:14px;padding:3px 8px;border-radius:4px;cursor:pointer;transition:all .15s;}
+.prop-odds.neg{color:var(–red);background:rgba(255,59,48,.1);border:1px solid rgba(255,59,48,.2);}
+.prop-odds.pos{color:var(–green);background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.2);}
+.prop-odds:hover{filter:brightness(1.25);}
+/* BET SLIP FLOAT */
+.slip-float{position:fixed;bottom:20px;right:14px;background:var(–green);color:#000;font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:14px;padding:12px 16px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,200,83,.3);z-index:300;transition:all .2s;}
+.slip-float:hover{transform:translateY(-2px);}
+.slip-float.hot{animation:pulse-green 2s infinite;}
+@keyframes pulse-green{0%,100%{box-shadow:0 4px 20px rgba(0,200,83,.3)}50%{box-shadow:0 4px 28px rgba(0,200,83,.6)}}
+.slip-count{background:#000;color:var(–green);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;}
+/* DRAWER */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:400;display:none;backdrop-filter:blur(2px);}
+.overlay.open{display:block;}
+.drawer{position:fixed;bottom:0;left:0;right:0;background:var(–dark);border-top:2px solid var(–green);border-radius:16px 16px 0 0;z-index:500;max-height:88vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.drawer.open{transform:translateY(0);}
+.drawer-handle{width:40px;height:4px;background:var(–border);border-radius:2px;margin:10px auto 0;cursor:pointer;}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(–border);}
+.drawer-title{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:18px;}
+.drawer-close{background:var(–pill);border:1px solid var(–border);color:var(–muted);font-size:18px;width:32px;height:32px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.drawer-body{flex:1;overflow-y:auto;padding:12px 16px;}
+.drawer-footer{padding:12px 16px;border-top:1px solid var(–border);}
+.slip-empty{text-align:center;padding:40px 20px;color:var(–muted);font-size:14px;line-height:2;}
+/* SLIP ITEM */
+.slip-item{background:var(–card);border:1px solid var(–border);border-radius:8px;padding:12px;margin-bottom:8px;position:relative;}
+.slip-name{font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:16px;}
+.slip-market{font-size:11px;color:var(–muted);margin-top:2px;}
+.slip-odds-val{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:20px;}
+.slip-odds-val.neg{color:var(–red);} .slip-odds-val.pos{color:var(–green);}
+.slip-remove{position:absolute;top:8px;right:8px;background:none;border:none;color:var(–muted);cursor:pointer;font-size:16px;padding:2px 5px;border-radius:4px;}
+.slip-remove:hover{color:var(–red);background:rgba(255,59,48,.1);}
+.amt-input{background:var(–pill);border:1px solid var(–border);color:var(–text);font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:16px;padding:6px 10px;border-radius:6px;outline:none;width:90px;transition:border-color .15s;}
+.amt-input:focus{border-color:var(–green);}
+.quick-amts{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;}
+.qamt{background:var(–pill);border:1px solid var(–border);color:var(–muted);font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:12px;padding:3px 8px;border-radius:4px;cursor:pointer;transition:all .15s;}
+.qamt:hover{border-color:var(–green);color:var(–green);}
+.slip-payout{font-size:12px;color:var(–green);margin-top:4px;}
+.total-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px;}
+.total-row .lbl{color:var(–muted);}
+.total-row .val{font-family:‘Barlow Condensed’,sans-serif;font-weight:700;}
+.place-btn{width:100%;background:var(–green);color:#000;font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:16px;padding:14px;border:none;border-radius:8px;cursor:pointer;margin-top:10px;text-transform:uppercase;transition:all .15s;}
+.place-btn:hover:not(:disabled){background:#00e060;transform:translateY(-1px);}
+.place-btn:disabled{background:var(–border);color:var(–muted);cursor:not-allowed;}
+.clear-btn{width:100%;background:transparent;color:var(–muted);font-size:12px;padding:8px;border:none;cursor:pointer;margin-top:4px;}
+.clear-btn:hover{color:var(–red);}
+/* LEADERBOARD */
+.lb-row{background:var(–card);border:1px solid var(–border);border-radius:8px;padding:12px 14px;margin-bottom:6px;display:flex;align-items:center;gap:12px;}
+.lb-row.gold{background:linear-gradient(135deg,rgba(245,166,35,.15),rgba(245,166,35,.05));border-color:rgba(245,166,35,.4);}
+.lb-rank{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:22px;width:30px;text-align:center;flex-shrink:0;}
+.lb-name{font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:17px;flex:1;}
+.lb-bal{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:18px;}
+.lb-change{font-size:11px;margin-top:2px;}
+/* BET HISTORY ROW */
+.bet-row{background:var(–card);border:1px solid var(–border);border-radius:6px;padding:10px 12px;margin-bottom:4px;}
+/* ADMIN */
+.admin-card{background:#1a1a0a;border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:14px;margin-bottom:8px;}
+.admin-btn{font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:13px;padding:7px 14px;border-radius:6px;cursor:pointer;text-transform:uppercase;transition:all .15s;}
+.admin-btn.red{background:rgba(255,59,48,.15);border:1px solid rgba(255,59,48,.4);color:var(–red);}
+.admin-btn.gold{background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.4);color:var(–gold);}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.stat-box{background:var(–card);border:1px solid var(–border);border-radius:8px;padding:10px 12px;}
+.stat-label{font-size:11px;color:var(–muted);text-transform:uppercase;letter-spacing:.5px;}
+.stat-val{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:22px;margin-top:2px;}
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{background:var(–dark);border:1px solid var(–border);border-radius:16px;padding:32px 24px;max-width:340px;width:100%;text-align:center;}
+.login-box h2{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:28px;margin-bottom:4px;}
+.field-label{font-size:11px;color:var(–muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:600;display:block;text-align:left;}
+.text-input{width:100%;background:var(–pill);border:1px solid var(–border);color:var(–text);font-size:15px;padding:9px 12px;border-radius:6px;outline:none;transition:border-color .15s;margin-bottom:12px;}
+.text-input:focus{border-color:var(–green);}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(–dark);border:1px solid var(–green);border-radius:16px;padding:32px 24px;max-width:340px;width:90%;text-align:center;animation:popIn .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-btn{background:var(–green);color:#000;border:none;font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:15px;padding:12px 32px;border-radius:8px;cursor:pointer;text-transform:uppercase;}
+/* TOAST */
+.toast-wrap{position:fixed;top:62px;right:14px;z-index:700;display:flex;flex-direction:column;gap:5px;pointer-events:none;}
+.toast{background:var(–dark);border:1px solid var(–border);border-left:3px solid var(–green);color:var(–text);font-size:13px;padding:10px 14px;border-radius:6px;min-width:200px;animation:slideIn .3s ease,fadeOut .3s ease 2.7s forwards;box-shadow:0 4px 20px rgba(0,0,0,.4);}
+.toast.red{border-left-color:var(–red);}
+@keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0;transform:translateX(110%)}}
+/* TICKER */
+.ticker-wrap{background:#0f0f1a;border-bottom:1px solid var(–border);padding:6px 0;overflow:hidden;}
+.ticker-inner{display:flex;gap:40px;animation:ticker 35s linear infinite;white-space:nowrap;width:max-content;}
+.ticker-wrap:hover .ticker-inner{animation-play-state:paused;}
+.ticker-item{font-family:‘Barlow Condensed’,sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;}
+.t-up{color:var(–green);} .t-down{color:var(–red);}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+/* UTIL */
+.pad{padding:0 14px 100px;}
+.mt{margin-top:10px;}
+.footer{padding:20px 14px;text-align:center;color:#333;font-size:11px;border-top:1px solid var(–border);margin-top:16px;line-height:1.8;}
+</style>
+</head>
+<body><!-- LOGIN SCREEN --><div id="loginScreen" class="login-wrap">
+  <div class="login-box">
+    <div style="font-size:44px;margin-bottom:10px">🏭</div>
+    <h2>ACY<span style="color:var(--green)">2</span>BOOK</h2>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:24px">2026 Departure Futures Market</p>
+    <label class="field-label">Your Name</label>
+    <input class="text-input" id="loginName" placeholder="Enter your name to play..." maxlength="30">
+    <label class="field-label" style="margin-top:4px">Admin Code <span style="color:#2a2a3d">(optional)</span></label>
+    <input class="text-input" id="loginAdmin" type="password" placeholder="Leave blank if not admin">
+    <button class="place-btn" style="margin-top:4px" onclick="doLogin()">Enter the Book</button>
+    <p style="color:#333;font-size:11px;margin-top:16px">Each player starts with $10,000 in fake money.<br>Bets are live and shared with everyone.</p>
+  </div>
+</div><!-- MAIN APP (hidden until login) --><div id="app" style="display:none"><!-- NAV --><nav class="nav">
+    <div class="logo" onclick="scrollTo({top:0,behavior:'smooth'})">ACY<span>2</span>BOOK</div>
+    <div class="nav-pills">
+      <button class="npill active" id="tab-board" onclick="setTab('board')">Board</button>
+      <button class="npill" id="tab-leaderboard" onclick="setTab('leaderboard')">🏆</button>
+      <button class="npill" id="tab-mybets" onclick="setTab('mybets')">My Bets</button>
+      <button class="npill" id="tab-admin" onclick="setTab('admin')" style="display:none">⚙️</button>
+      <button class="npill ghost" onclick="doLogout()" title="Switch user">⇄</button>
+    </div>
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+  </nav><!-- TICKER --><div class="ticker-wrap">
+    <div class="ticker-inner" id="ticker">
+      <span class="ticker-item"><span>DAVID</span><span class="t-down">CONFIRMED OUT 6/28 ▼</span></span>
+      <span class="ticker-item"><span>MATT S</span><span class="t-down">CONFIRMED OUT 6/28 ▼</span></span>
+      <span class="ticker-item"><span>NICK D</span><span class="t-down">DEPARTED ✓</span></span>
+      <span class="ticker-item"><span>SYD</span><span class="t-up">INFORMATIONAL W/ BRIAN THIS TUESDAY ▲</span></span>
+      <span class="ticker-item"><span>RANDY</span><span>🔒 -2500 LOCK OF YEAR</span></span>
+      <span class="ticker-item"><span>CASS</span><span class="t-down">-1200 SHARP MONEY IN</span></span>
+      <span class="ticker-item"><span>KATE</span><span>🦉 THE OWL SEES ALL</span></span>
+      <!-- dupe for seamless loop -->
+      <span class="ticker-item"><span>DAVID</span><span class="t-down">CONFIRMED OUT 6/28 ▼</span></span>
+      <span class="ticker-item"><span>MATT S</span><span class="t-down">CONFIRMED OUT 6/28 ▼</span></span>
+      <span class="ticker-item"><span>NICK D</span><span class="t-down">DEPARTED ✓</span></span>
+      <span class="ticker-item"><span>SYD</span><span class="t-up">INFORMATIONAL W/ BRIAN THIS TUESDAY ▲</span></span>
+      <span class="ticker-item"><span>RANDY</span><span>🔒 -2500 LOCK OF YEAR</span></span>
+      <span class="ticker-item"><span>CASS</span><span class="t-down">-1200 SHARP MONEY IN</span></span>
+      <span class="ticker-item"><span>KATE</span><span>🦉 THE OWL SEES ALL</span></span>
+    </div>
+  </div><!-- BOARD TAB --><div class="tab active" id="tab-board-content">
+    <div class="hero">
+      <span class="sport-tag">🏭 Operations</span>
+      <h1>ACY2 DEPARTURE ODDS BOARD</h1>
+      <div class="hero-sub">
+        <span id="heroName">—</span>
+        <span>💰 <strong id="heroBalance">$10,000</strong></span>
+        <span id="heroBets">0 bets placed</span>
+      </div>
+    </div>
+
+<div class="section-label">🔴 Confirmed Departures</div>
+<div class="odds-list" id="list-confirmed"></div>
+
+<div class="section-label">🔥 Heavy Favorites</div>
+<div class="odds-list" id="list-favorites"></div>
+
+<div class="section-label">💰 Value Plays</div>
+<div class="odds-list" id="list-value"></div>
+
+<div class="section-label">👻 Unclassifiable</div>
+<div class="odds-list" id="list-mystery"></div>
+
+<div class="footer">
+  ACY2Book · For entertainment purposes only · Lines updated live<br>
+  <span style="color:#2a2a3d">Gambling problem? ACY2's HR has a pamphlet. It is also leaving.</span>
+</div>
+
+
+</div><!-- LEADERBOARD TAB --><div class="tab" id="tab-leaderboard-content">
+    <div class="hero"><h1>🏆 LEADERBOARD</h1><div class="hero-sub" id="lb-sub">Loading...</div></div>
+    <div class="pad">
+      <div class="section-label">Rankings <div style="flex:1;height:1px;background:var(--border)"></div></div>
+      <div id="lb-rows"></div>
+      <div class="section-label">Recent Bets <div style="flex:1;height:1px;background:var(--border)"></div></div>
+      <div id="lb-bets"></div>
+    </div>
+  </div><!-- MY BETS TAB --><div class="tab" id="tab-mybets-content">
+    <div class="hero"><h1>MY BETS</h1><div class="hero-sub" id="mybets-sub">Loading...</div></div>
+    <div class="pad">
+      <div class="section-label">Your Bets <div style="flex:1;height:1px;background:var(--border)"></div></div>
+      <div id="mybets-list"></div>
+    </div>
+  </div><!-- ADMIN TAB --><div class="tab" id="tab-admin-content">
+    <div class="hero"><h1>⚙️ ADMIN PANEL</h1><div class="hero-sub">Grade departures · Move lines · Settle bets</div></div>
+    <div class="pad">
+      <div style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--gold)">
+        🔒 Admin access active. You can grade departures and move lines.
+      </div>
+      <div class="section-label">Grade Departures <div style="flex:1;height:1px;background:var(--border)"></div></div>
+      <div id="admin-grade"></div>
+      <div class="section-label" style="margin-top:8px">Move Lines <div style="flex:1;height:1px;background:var(--border)"></div></div>
+      <div id="admin-lines"></div>
+      <div class="section-label" style="margin-top:8px">Book Stats <div style="flex:1;height:1px;background:var(--border)"></div></div>
+      <div class="stat-grid" id="admin-stats"></div>
+    </div>
+  </div></div><!-- BET SLIP FLOAT --><div class="slip-float" id="slipFloat" onclick="openDrawer()" style="display:none">
+  🎟️ BET SLIP <div class="slip-count" id="slipCount">0</div>
+</div><!-- OVERLAY + DRAWER --><div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-handle" onclick="closeDrawer()"></div>
+  <div class="drawer-header">
+    <div class="drawer-title">🎟️ Bet Slip</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:12px;color:var(--muted)">Balance: <strong id="drawerBal" style="color:var(--green)">$10,000</strong></span>
+      <button class="drawer-close" onclick="closeDrawer()">×</button>
+    </div>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-footer" id="drawerFooter" style="display:none">
+    <div class="total-row"><span class="lbl">Total Wagered</span><span class="val" id="totalWagered">$0</span></div>
+    <div class="total-row"><span class="lbl">Est. Payout</span><span class="val" style="color:var(--green)" id="totalPayout">$0</span></div>
+    <div id="balWarning" style="color:var(--red);font-size:12px;display:none">⚠️ Exceeds your balance</div>
+    <button class="place-btn" id="placeBtn" onclick="placeBets()">Place Bets</button>
+    <button class="clear-btn" onclick="clearSlip()">Remove All Selections</button>
+  </div>
+</div><!-- CONFIRM MODAL --><div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div style="font-size:48px;margin-bottom:12px">✅</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;margin-bottom:8px" id="modalTitle">Bets Placed!</div>
+    <div style="color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:20px" id="modalText"></div>
+    <button class="modal-btn" onclick="closeModal()">Back to Board</button>
+  </div>
+</div><!-- TOAST CONTAINER --><div class="toast-wrap" id="toastWrap"></div><script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const ADMIN_CODE   = "ACY2ADMIN";
+const STARTING_BAL = 10000;
+const BIN_ID       = "6a1260f36610dd3ae896822a";
+const BIN_KEY      = "$2a$10$J7I.0/L.WJmL6VbWJTQNNuGrUZ07aXa.u1eeZ12kNbVCt7/0fMomC";
+const BIN_URL      = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const BIN_HEADERS  = {"Content-Type":"application/json","X-Master-Key":BIN_KEY,"X-Bin-Versioning":"false"};
+const LS_KEY       = "acy2book:identity";
+
+// ─── PLAYERS ─────────────────────────────────────────────────────────────────
+const PLAYERS = [
+  {id:"nick",    name:"Nick Digiorno", initials:"ND", odds:null,  type:"neg", section:"confirmed", status:"departed", display:"✓ OUT",       dotClass:"dot-gone", cardClass:"confirmed",
+   analysis:"Most anonymous player on the board officially confirmed out. Scouts report several employees remain unsure he ever worked there. Exit scenario: left building, nobody noticed. One random AA asked 'wait where's Nick?' approximately 3 weeks post-departure.", props:[]},
+  {id:"david",   name:"David",         initials:"DA", odds:null,  type:"neg", section:"confirmed", status:"departed", display:"PLEASE GOD",  dotClass:"dot-gone", cardClass:"confirmed",
+   analysis:"The line that broke oddsmakers. Offer letter confirmed. Last day: June 28. This market closes as the largest consensus win in ACY2Book history. All tickets graded WIN.", props:[]},
+  {id:"matts",   name:"Matt S",        initials:"MS", odds:null,  type:"neg", section:"confirmed", status:"departed", display:"+180",         dotClass:"dot-gone", cardClass:"confirmed",
+   analysis:"The value play of the season. Opened at +180 while the market slept. Offer letter confirmed. Last day June 28. Nobody knows who locked those bins. Nobody ever will.",
+   props:[{label:"Who locked the bins: Matt S",odds:"-350",type:"neg"},{label:"Anyone ever figures it out",odds:"+2200",type:"pos"}]},
+  {id:"randy",   name:"Randolph Files",initials:"RF", odds:-2500, type:"neg", section:"favorites", status:"active",   display:"-2500 🔒",    dotClass:"dot-hot",  cardClass:"lock",
+   analysis:"Guy has 'Files' next to his name. The script writers decided this before the season started. HR has reportedly pre-printed the paperwork. Escape through the nearest non-TDR'd trailer before Security reaches the stow desk.", props:[]},
+  {id:"cass",    name:"Cass",          initials:"CA", odds:-1200, type:"neg", section:"favorites", status:"active",   display:"-1200",        dotClass:"dot-hot",  cardClass:"",
+   analysis:"The 3P Meta is no longer a theory. It's a lifestyle. Sharp money has flooded in after multiple 'what if I just disappear' indicators entered the market.",
+   props:[{label:"Pregnancy",odds:"+900",type:"pos"},{label:"Moving in with Colin",odds:"+1400",type:"pos"},{label:"Becoming a cryptid in OB",odds:"+250",type:"pos"}]},
+  {id:"savanna", name:"Savanna",       initials:"SA", odds:-900,  type:"neg", section:"favorites", status:"active",   display:"-900",         dotClass:"dot-hot",  cardClass:"",
+   analysis:"TEB6 reject. Future ACY2 reject. Generational leave candidate. Elite at donating PTO. Expected departure: immediately after saying 'wait what' one final time.", props:[]},
+  {id:"syd",     name:"Syd",           initials:"SY", odds:-420,  type:"neg", section:"favorites", status:"active",   display:"-420",         dotClass:"dot-hot",  cardClass:"syd",
+   analysis:"🚨 LINE ALERT: Opened at -450. Brian discount applied — sitting at -420. Informational interview THIS TUESDAY with a Brian. Brians historically 0 for 4 in converting informals. Bet it, but size down 15% for Brian interference. If the informational converts despite Brian, this line rockets to -1800.",
+   props:[{label:"Informational converts (Brian discount applied)",odds:"-110",type:"neg"},{label:"Brian completely wastes her time",odds:"+140",type:"pos"},{label:"Gone before peak season",odds:"-115",type:"neg"},{label:"\"I'm too smart for this\" era begins",odds:"-220",type:"neg"},{label:"Stays another full year",odds:"+450",type:"pos"}]},
+  {id:"rich",    name:"Rich",          initials:"RI", odds:-700,  type:"neg", section:"favorites", status:"active",   display:"-700",         dotClass:"dot-warm", cardClass:"",
+   analysis:"Longest-tenured Bulk Floor PA in USNS history only to get power-crept by steel racking. Either leaves honorably or gets dragged out from the smokers cage. No in-between.",
+   props:[{label:"Honorable departure",odds:"+140",type:"pos"},{label:"Dragged from smokers cage",odds:"+200",type:"pos"}]},
+  {id:"kurt",    name:"Kurt",          initials:"KU", odds:325,   type:"pos", section:"value",     status:"active",   display:"+325",         dotClass:"dot-warm", cardClass:"",
+   analysis:"3P Meta whispers grow louder. World Cup interference is a real variable, and OB is running dangerously low on glue sticks. If Kurt goes, civilization may follow.",
+   props:[{label:"World Cup-triggered departure",odds:"+550",type:"pos"},{label:"OB loses its final glue stick",odds:"+300",type:"pos"}]},
+  {id:"hetvi",   name:"Hetvi",         initials:"HE", odds:600,   type:"pos", section:"value",     status:"active",   display:"+600",         dotClass:"dot-warm", cardClass:"",
+   analysis:"Free agency rumors at TEB3 continue to circulate. Insiders cite 'vibes' as the primary reason, which has made modeling extremely difficult.",
+   props:[{label:"L6 by October 2027",odds:"+450",type:"pos"},{label:"Knowledge gap continuation",odds:"-130",type:"neg"}]},
+  {id:"colin",   name:"Colin",         initials:"CO", odds:750,   type:"pos", section:"value",     status:"active",   display:"+750",         dotClass:"dot-cold", cardClass:"",
+   analysis:"Would genuinely hurt the roster. Markets reacted negatively after 'police officer' comments entered circulation. Veteran glue guy. Quietly one of the few keeping civilization intact.", props:[]},
+  {id:"sebastian",name:"Sebastian",    initials:"??", odds:500,   type:"pos", section:"value",     status:"active",   display:"+500",         dotClass:"dot-cold", cardClass:"",
+   analysis:"Oddsmakers attempted to clarify which Sebastian this referred to and unanimously agreed it does not matter. The line applies to all Sebastians. This is not a mistake. This is philosophy.", props:[]},
+  {id:"kate",    name:"Kate",          initials:"🦉", odds:1000,  type:"pos", section:"mystery",   status:"active",   display:"🦉 +1000?",   dotClass:"dot-cold", cardClass:"",
+   analysis:"No one understands the line. No one understands the owl. The owl sees all. Oddsmakers have stopped trying. The question mark is load-bearing. Do not remove it.", props:[]},
+];
+
+const DRIFT_RAILS = {
+  cass:[-1400,-900], savanna:[-1100,-700], syd:[-600,-280],
+  rich:[-850,-500], kurt:[200,500], hetvi:[400,800],
+  colin:[550,950], sebastian:[350,650], kate:[800,1200]
+};
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let currentUser = null; // {name, isAdmin}
+let db = {users:[], bets:[], players:[]}; // local mirror of JSONBin
+let slip = []; // [{name, market, odds, type, amount, playerId}]
+let players = JSON.parse(JSON.stringify(PLAYERS)); // working copy
+let prevOdds = {}; // for flash detection
+
+// ─── JSONBIN ─────────────────────────────────────────────────────────────────
+async function dbFetch() {
+  try {
+    const r = await fetch(`${BIN_URL}/latest`, {headers:BIN_HEADERS});
+    const j = await r.json();
+    db = j.record || {users:[],bets:[],players:[]};
+    if (!db.users) db.users = [];
+    if (!db.bets) db.bets = [];
+    if (!db.players) db.players = [];
+  } catch(e) { console.warn("fetch failed", e); }
+}
+
+async function dbPush() {
+  try {
+    await fetch(BIN_URL, {method:"PUT", headers:BIN_HEADERS, body:JSON.stringify(db)});
+  } catch(e) { console.warn("push failed", e); }
+}
+
+// ─── LOCAL STORAGE IDENTITY ───────────────────────────────────────────────────
+function lsGet() { try { return JSON.parse(localStorage.getItem(LS_KEY)); } catch { return null; } }
+function lsSet(v) { try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch {} }
+function lsClear() { try { localStorage.removeItem(LS_KEY); } catch {} }
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function calcPayout(amount, oddsStr) {
+  const o = parseInt(String(oddsStr).replace("+",""));
+  if (isNaN(o) || o === 0) return amount;
+  if (o > 0) return +(amount * (o/100) + amount).toFixed(2);
+  return +(amount * (100/Math.abs(o)) + amount).toFixed(2);
+}
+function calcProfit(amount, odds) { return +(calcPayout(amount, odds) - amount).toFixed(2); }
+function fmtMoney(n) {
+  const abs = Math.abs(n);
+  const s = abs >= 1000 ? `$${(abs/1000).toFixed(1)}k` : `$${abs.toFixed(2)}`;
+  return n < 0 ? `-${s}` : s;
+}
+function timeAgo(ts) {
+  const d = (Date.now()-ts)/1000;
+  if(d<60) return "just now";
+  if(d<3600) return Math.floor(d/60)+"m ago";
+  if(d<86400) return Math.floor(d/3600)+"h ago";
+  return Math.floor(d/86400)+"d ago";
+}
+function getMyBalance() {
+  const u = db.users.find(u=>u.name===currentUser?.name);
+  return u ? u.balance : STARTING_BAL;
+}
+function getPlayer(id) { return players.find(p=>p.id===id); }
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function toast(msg, red=false) {
+  const el = document.createElement("div");
+  el.className = "toast" + (red?" red":"");
+  el.textContent = msg;
+  document.getElementById("toastWrap").appendChild(el);
+  setTimeout(()=>el.remove(), 3200);
+}
+
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const name = document.getElementById("loginName").value.trim();
+  const code = document.getElementById("loginAdmin").value.trim().toUpperCase();
+  if (!name) return;
+  const isAdmin = code === ADMIN_CODE;
+  currentUser = {name, isAdmin};
+  lsSet({name, isAdmin});
+  await dbFetch();
+  // register if new
+  if (!db.users.find(u=>u.name===name)) {
+    db.users.push({name, balance:STARTING_BAL, joinedAt:Date.now()});
+    await dbPush();
+    toast(`Welcome to ACY2Book, ${name}! You have ${fmtMoney(STARTING_BAL)} to play.`);
+  } else {
+    toast(`Welcome back, ${name}! Balance: ${fmtMoney(getMyBalance())}`);
+  }
+  showApp();
+}
+
+function doLogout() {
+  lsClear();
+  currentUser = null;
+  slip = [];
+  document.getElementById("loginName").value = "";
+  document.getElementById("loginAdmin").value = "";
+  document.getElementById("loginScreen").style.display = "flex";
+  document.getElementById("app").style.display = "none";
+  document.getElementById("slipFloat").style.display = "none";
+}
+
+// ─── SHOW APP ────────────────────────────────────────────────────────────────
+function showApp() {
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  document.getElementById("slipFloat").style.display = "flex";
+  if (currentUser?.isAdmin) document.getElementById("tab-admin").style.display = "inline-block";
+  applyStoredPlayers();
+  renderBoard();
+  renderHero();
+  startPolling();
+  startDrift();
+}
+
+// ─── APPLY STORED PLAYER ODDS/STATUS ─────────────────────────────────────────
+function applyStoredPlayers() {
+  players = JSON.parse(JSON.stringify(PLAYERS)); // reset to base
+  db.players.forEach(sp => {
+    const p = players.find(p=>p.id===sp.id);
+    if (!p) return;
+    if (sp.status) p.status = sp.status;
+    if (sp.odds !== undefined) p.odds = sp.odds;
+    if (sp.display) p.display = sp.display;
+    if (sp.type) p.type = sp.type;
+  });
+}
+
+// ─── RENDER BOARD ────────────────────────────────────────────────────────────
+const SECTION_MAP = {confirmed:"list-confirmed", favorites:"list-favorites", value:"list-value", mystery:"list-mystery"};
+
+function renderBoard() {
+  Object.values(SECTION_MAP).forEach(id => document.getElementById(id).innerHTML = "");
+  players.forEach(p => {
+    const el = buildCard(p);
+    const target = SECTION_MAP[p.section];
+    if (target) document.getElementById(target).appendChild(el);
+  });
+}
+
+function buildCard(p) {
+  const isDead = p.status === "departed";
+  const isLock = p.id === "randy";
+  const isSyd  = p.id === "syd";
+
+  const div = document.createElement("div");
+  div.className = `pcard ${p.cardClass || ""} ${isSyd?"syd":""}`;
+  div.id = `pcard-${p.id}`;
+  if (isSyd) div.classList.add("open"); // auto-open Syd
+
+  let tagsHtml = "";
+  if (isDead) tagsHtml += `<span class="tag confirmed">DEPARTED</span>`;
+  if (isSyd && !isDead) tagsHtml += `<span class="tag breaking">INFORMATIONAL W/ BRIAN: THIS TUESDAY</span><span class="tag friend">LINE MOVING (BRIAN DISCOUNT)</span>`;
+  if (isLock) tagsHtml += `<span class="tag hot">LOCK OF THE YEAR</span>`;
+  if (p.id==="cass") tagsHtml += `<span class="tag hot">Sharp Money In</span>`;
+
+  const btnClass = isDead ? "dead" : isLock ? "lockbtn" : p.type;
+  const oddsNumStyle = isSyd ? `style="color:#c084fc"` : "";
+
+  let propsHtml = "";
+  if (p.props?.length) {
+    propsHtml = p.props.map((pr,i) =>
+      `<div class="prop-row" onclick="addToSlip('${p.name}','${pr.label.replace(/'/g,"\\'")}','${pr.odds}','${pr.type}','${p.id}')">
+        <span class="prop-label">${pr.label}</span>
+        <span class="prop-odds ${pr.type}">${pr.odds}</span>
+      </div>`
+    ).join("");
+  }
+
+  div.innerHTML = `
+    <div class="card-main" onclick="toggleCard('${p.id}')">
+      <div class="avatar ${isSyd?'style="background:linear-gradient(135deg,#003d1a,#001a0a)"':''}">
+        ${p.initials}<div class="status-dot ${p.dotClass}"></div>
+      </div>
+      <div class="player-info">
+        <div class="player-name">${p.name}${isLock?" 🔒":""}${isSyd?" ⭐":""}</div>
+        <div class="player-tags">${tagsHtml}</div>
+      </div>
+      <div class="odds-btn ${btnClass}" id="obtn-${p.id}" onclick="${isDead?`event.stopPropagation();toast('Market closed — ${p.name} is out.')`:isLock?`event.stopPropagation();addToSlip('${p.name}','To Depart','${p.display}','${p.type}','${p.id}')`:isSyd?`event.stopPropagation();addToSlipSyd()`:
+        `event.stopPropagation();addToSlip('${p.name}','To Depart','${p.display}','${p.type}','${p.id}')`}">
+        <div class="odds-label">${isDead?"RESULT":"To Depart"}</div>
+        <div class="odds-num" id="onum-${p.id}" ${oddsNumStyle}>${p.display}</div>
+      </div>
+    </div>
+    <button class="expand-toggle" onclick="toggleCard('${p.id}')">${isSyd?"▾ Full Analysis":"▾ Analysis"}</button>
+    <div class="card-expand">
+      <div class="analysis-text">${p.analysis}</div>
+      ${propsHtml ? `<div>${propsHtml}</div>` : ""}
+    </div>`;
+  return div;
+}
+
+function toggleCard(id) {
+  const card = document.getElementById(`pcard-${id}`);
+  if (!card) return;
+  card.classList.toggle("open");
+  const btn = card.querySelector(".expand-toggle");
+  const isOpen = card.classList.contains("open");
+  const isSyd = id === "syd";
+  btn.textContent = isOpen ? "▴ Hide" : (isSyd ? "▾ Full Analysis" : "▾ Analysis");
+}
+
+// ─── HERO ────────────────────────────────────────────────────────────────────
+function renderHero() {
+  if (!currentUser) return;
+  const myBets = db.bets.filter(b=>b.userName===currentUser.name);
+  document.getElementById("heroName").textContent = `👤 ${currentUser.name}`;
+  document.getElementById("heroBalance").textContent = fmtMoney(getMyBalance());
+  document.getElementById("heroBets").textContent = `${myBets.length} bet${myBets.length!==1?"s":""} placed`;
+  document.getElementById("drawerBal").textContent = fmtMoney(getMyBalance());
+}
+
+// ─── TABS ────────────────────────────────────────────────────────────────────
+function setTab(name) {
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".npill:not(.ghost)").forEach(p=>p.classList.remove("active"));
+  document.getElementById(`tab-${name}-content`).classList.add("active");
+  document.getElementById(`tab-${name}`).classList.add("active");
+  if (name==="leaderboard") renderLeaderboard();
+  if (name==="mybets") renderMyBets();
+  if (name==="admin") renderAdmin();
+}
+
+// ─── LEADERBOARD ─────────────────────────────────────────────────────────────
+function renderLeaderboard() {
+  const medals = ["🥇","🥈","🥉"];
+  const ranked = [...db.users].sort((a,b)=>b.balance-a.balance);
+  document.getElementById("lb-sub").textContent = `${db.users.length} players · ${db.bets.length} total bets`;
+  document.getElementById("lb-rows").innerHTML = ranked.map((u,i)=>{
+    const change = u.balance - STARTING_BAL;
+    const userBets = db.bets.filter(b=>b.userName===u.name);
+    const isGold = i===0;
+    return `<div class="lb-row ${isGold?"gold":""}">
+      <div class="lb-rank" style="color:${i===0?"#f5a623":i===1?"#aaaacc":i===2?"#cd7f32":"var(--muted)"}">${medals[i]||i+1}</div>
+      <div>
+        <div class="lb-name">${u.name}</div>
+        <div style="font-size:11px;color:var(--muted)">${userBets.length} bet${userBets.length!==1?"s":""}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="lb-bal" style="color:${u.balance>=STARTING_BAL?"var(--green)":"var(--red)"}">${fmtMoney(u.balance)}</div>
+        <div class="lb-change" style="color:${change>=0?"var(--green)":"var(--red)"}">${change>=0?"+":""}${fmtMoney(change)}</div>
+      </div>
+    </div>`;
+  }).join("");
+
+  const recent = [...db.bets].sort((a,b)=>b.timestamp-a.timestamp).slice(0,30);
+  document.getElementById("lb-bets").innerHTML = recent.length ? recent.map(b=>`
+    <div class="bet-row">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><strong>${b.userName}</strong> <span style="color:var(--muted);font-size:12px">bet on</span> <strong>${b.name}</strong> <span style="color:var(--muted);font-size:11px">— ${b.market}</span></div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;color:${b.type==="neg"?"var(--red)":"var(--green)"}">${b.odds}</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px">
+        <div style="font-size:12px;color:var(--muted)">Wagered: <span style="color:var(--text)">${fmtMoney(b.amount)}</span>
+          ${b.status==="won"?`<span style="color:var(--green);margin-left:8px">✓ WON +${fmtMoney(calcProfit(b.amount,b.odds))}</span>`:""}
+          ${b.status==="lost"?`<span style="color:var(--red);margin-left:8px">✗ LOST -${fmtMoney(b.amount)}</span>`:""}
+          ${b.status==="open"?`<span style="color:var(--gold);margin-left:8px">⏳ Open</span>`:""}
+        </div>
+        <div style="font-size:11px;color:var(--muted)">${timeAgo(b.timestamp)}</div>
+      </div>
+    </div>`).join("") : `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No bets placed yet.</div>`;
+}
+
+// ─── MY BETS ─────────────────────────────────────────────────────────────────
+function renderMyBets() {
+  const myBets = [...db.bets.filter(b=>b.userName===currentUser?.name)].sort((a,b)=>b.timestamp-a.timestamp);
+  const bal = getMyBalance();
+  const open = myBets.filter(b=>b.status==="open").length;
+  document.getElementById("mybets-sub").innerHTML = `Balance: <strong style="color:var(--green)">${fmtMoney(bal)}</strong>&nbsp;&nbsp;${open} open`;
+  document.getElementById("mybets-list").innerHTML = myBets.length ? myBets.map(b=>`
+    <div class="slip-item">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><div class="slip-name">${b.name}</div><div class="slip-market">${b.market}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">${timeAgo(b.timestamp)}</div></div>
+        <div style="text-align:right"><div class="slip-odds-val ${b.type}">${b.odds}</div>
+          <div style="font-size:11px;margin-top:2px;color:${b.status==="won"?"var(--green)":b.status==="lost"?"var(--red)":"var(--gold)"}">
+            ${b.status==="won"?"✓ WON":b.status==="lost"?"✗ LOST":"⏳ Open"}
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px">
+        <span style="color:var(--muted)">Wagered: <span style="color:var(--text)">${fmtMoney(b.amount)}</span></span>
+        <span style="color:${b.status==="won"?"var(--green)":b.status==="lost"?"var(--red)":"var(--muted)"}">
+          ${b.status==="won"?"+"+fmtMoney(calcProfit(b.amount,b.odds)):b.status==="lost"?"-"+fmtMoney(b.amount):"Est. "+fmtMoney(calcPayout(b.amount,b.odds))}
+        </span>
+      </div>
+    </div>`).join("")
+  : `<div style="text-align:center;padding:40px 20px;color:var(--muted);font-size:14px">No bets yet. Head to the board and pick your spots.</div>`;
+}
+
+// ─── ADMIN ────────────────────────────────────────────────────────────────────
+function renderAdmin() {
+  const active = players.filter(p=>p.status==="active");
+
+  document.getElementById("admin-grade").innerHTML = active.map(p=>{
+    const openBets = db.bets.filter(b=>b.playerId===p.id&&b.status==="open");
+    const stake = openBets.reduce((s,b)=>s+b.amount,0);
+    return `<div class="admin-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px">${p.name}</div>
+        <div style="font-size:11px;color:var(--muted)">${openBets.length} open bets · ${fmtMoney(stake)} at stake</div></div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;color:${p.type==="neg"?"var(--red)":"var(--green)"}">${p.display}</div>
+      </div>
+      <button class="admin-btn red" onclick="gradePlayer('${p.id}')">✓ Mark Departed — Pay Out Bets</button>
+    </div>`;
+  }).join("");
+
+  document.getElementById("admin-lines").innerHTML = active.map(p=>`
+    <div class="admin-card">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;margin-bottom:8px">${p.name} <span style="color:var(--muted);font-weight:400;font-size:13px">current: ${p.display}</span></div>
+      <div style="display:flex;gap:8px">
+        <input class="text-input" style="flex:1;margin-bottom:0" id="newodds-${p.id}" placeholder="e.g. -550 or +300">
+        <button class="admin-btn gold" onclick="adminUpdateOdds('${p.id}')">Update</button>
+      </div>
+    </div>`).join("");
+
+  const totalWagered = db.bets.reduce((s,b)=>s+b.amount,0);
+  document.getElementById("admin-stats").innerHTML = [
+    {label:"Total Players",val:db.users.length},
+    {label:"Total Bets",val:db.bets.length},
+    {label:"Total Wagered",val:fmtMoney(totalWagered)},
+    {label:"Open Bets",val:db.bets.filter(b=>b.status==="open").length},
+  ].map(s=>`<div class="stat-box"><div class="stat-label">${s.label}</div><div class="stat-val">${s.val}</div></div>`).join("");
+}
+
+async function gradePlayer(playerId) {
+  const p = players.find(x=>x.id===playerId);
+  if (!p) return;
+  // grade all open bets on this player as won
+  db.bets = db.bets.map(b=>{
+    if (b.playerId!==playerId||b.status!=="open") return b;
+    return {...b, status:"won", gradedAt:Date.now()};
+  });
+  // pay out winners
+  db.users = db.users.map(u=>{
+    const winnings = db.bets.filter(b=>b.userName===u.name&&b.playerId===playerId&&b.status==="won")
+      .reduce((s,b)=>s+calcPayout(b.amount,b.odds),0);
+    return winnings>0 ? {...u, balance:u.balance+winnings} : u;
+  });
+  // mark player departed
+  p.status = "departed";
+  syncPlayersToDb();
+  await dbPush();
+  applyStoredPlayers();
+  renderBoard();
+  renderAdmin();
+  renderHero();
+  const winners = db.bets.filter(b=>b.playerId===playerId&&b.status==="won");
+  toast(`✓ ${p.name} marked departed. ${winners.length} bet${winners.length!==1?"s":""} paid out!`);
+}
+
+async function adminUpdateOdds(playerId) {
+  const input = document.getElementById(`newodds-${playerId}`);
+  const raw = input.value.trim();
+  const o = parseInt(raw.replace("+",""));
+  if (isNaN(o)) { toast("Invalid odds — use e.g. -550 or +300", true); return; }
+  const p = players.find(x=>x.id===playerId);
+  if (!p) return;
+  const display = o>0?`+${o}`:`${o}`;
+  const type = o<0?"neg":"pos";
+  p.odds = o; p.display = display; p.type = type;
+  syncPlayersToDb();
+  await dbPush();
+  renderBoard();
+  renderAdmin();
+  input.value = "";
+  toast(`Line updated: ${p.name} → ${display}`);
+}
+
+function syncPlayersToDb() {
+  db.players = players.map(p=>({id:p.id,status:p.status,odds:p.odds,display:p.display,type:p.type}));
+}
+
+// ─── BET SLIP ────────────────────────────────────────────────────────────────
+function addToSlip(name, market, odds, type, playerId) {
+  if (slip.find(b=>b.name===name&&b.market===market)) { toast(`Already in slip: ${name}`, true); return; }
+  slip.push({name, market, odds, type, amount:10, playerId});
+  updateSlipUI();
+  openDrawer();
+  toast(`Added: ${name} ${odds}`);
+}
+
+function addToSlipSyd() {
+  const live = document.getElementById("onum-syd")?.textContent || "-420";
+  addToSlip("Syd","To Depart", live, "neg", "syd");
+}
+
+function removeFromSlip(i) {
+  slip.splice(i,1);
+  updateSlipUI();
+}
+
+function updateAmt(i, val) {
+  slip[i].amount = Math.max(1, parseFloat(val)||1);
+  updateSlipUI(true); // partial update (don't rebuild DOM)
+}
+
+function setAmt(i, val) {
+  slip[i].amount = val;
+  updateSlipUI();
+}
+
+function clearSlip() {
+  slip = [];
+  updateSlipUI();
+}
+
+function updateSlipUI(partial=false) {
+  const count = slip.length;
+  document.getElementById("slipCount").textContent = count;
+  document.getElementById("slipFloat").className = "slip-float" + (count>0?" hot":"");
+
+  const body = document.getElementById("drawerBody");
+  const footer = document.getElementById("drawerFooter");
+
+  if (count===0) {
+    body.innerHTML = `<div class="slip-empty"><div style="font-size:40px">🎟️</div>Tap any odds button to add a selection.</div>`;
+    footer.style.display = "none";
+    return;
+  }
+
+  footer.style.display = "block";
+
+  if (!partial) {
+    body.innerHTML = slip.map((b,i)=>`
+      <div class="slip-item">
+        <button class="slip-remove" onclick="removeFromSlip(${i})">×</button>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+          <div><div class="slip-name">${b.name}</div><div class="slip-market">${b.market}</div></div>
+          <div class="slip-odds-val ${b.type}">${b.odds}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+          <span style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap">Wager $</span>
+          <input class="amt-input" type="number" min="1" value="${b.amount}" oninput="updateAmt(${i},this.value)">
+        </div>
+        <div class="quick-amts">
+          <button class="qamt" onclick="setAmt(${i},10)">$10</button>
+          <button class="qamt" onclick="setAmt(${i},50)">$50</button>
+          <button class="qamt" onclick="setAmt(${i},100)">$100</button>
+          <button class="qamt" onclick="setAmt(${i},500)">$500</button>
+        </div>
+        <div class="slip-payout" id="slippay-${i}">Est. return: ${fmtMoney(calcPayout(b.amount,b.odds))}</div>
+      </div>`).join("");
+  } else {
+    // just update payout labels
+    slip.forEach((b,i)=>{
+      const el = document.getElementById(`slippay-${i}`);
+      if (el) el.textContent = `Est. return: ${fmtMoney(calcPayout(b.amount,b.odds))}`;
+    });
+  }
+
+  const total = slip.reduce((s,b)=>s+(parseFloat(b.amount)||0),0);
+  const payout = slip.reduce((s,b)=>s+calcPayout(parseFloat(b.amount)||0,b.odds),0);
+  const bal = getMyBalance();
+  document.getElementById("totalWagered").textContent = fmtMoney(total);
+  document.getElementById("totalPayout").textContent = fmtMoney(payout);
+  const warn = document.getElementById("balWarning");
+  warn.style.display = total>bal?"block":"none";
+  document.getElementById("placeBtn").disabled = count===0||total<=0||total>bal;
+}
+
+async function placeBets() {
+  const bal = getMyBalance();
+  const total = slip.reduce((s,b)=>s+(parseFloat(b.amount)||0),0);
+  if (total>bal) { toast("Exceeds balance!", true); return; }
+
+  const newBets = slip.map(b=>({
+    id: Date.now()+Math.random(),
+    userName: currentUser.name,
+    playerId: b.playerId,
+    name: b.name,
+    market: b.market,
+    odds: b.odds,
+    type: b.type,
+    amount: parseFloat(b.amount)||0,
+    status: "open",
+    timestamp: Date.now()
+  }));
+
+  db.bets = [...db.bets, ...newBets];
+  db.users = db.users.map(u=>u.name===currentUser.name?{...u,balance:u.balance-total}:u);
+  await dbPush();
+
+  slip = [];
+  closeDrawer();
+  updateSlipUI();
+  renderHero();
+
+  document.getElementById("modalTitle").textContent = "Bets Placed! 🎉";
+  document.getElementById("modalText").textContent = `${newBets.length} bet${newBets.length>1?"s":""} placed. ${fmtMoney(total)} wagered. New balance: ${fmtMoney(bal-total)}`;
+  document.getElementById("modal").classList.add("open");
+}
+
+// ─── DRAWER ───────────────────────────────────────────────────────────────────
+function openDrawer() {
+  document.getElementById("overlay").classList.add("open");
+  document.getElementById("drawer").classList.add("open");
+  updateSlipUI();
+}
+function closeDrawer() {
+  document.getElementById("overlay").classList.remove("open");
+  document.getElementById("drawer").classList.remove("open");
+}
+function closeModal() { document.getElementById("modal").classList.remove("open"); }
+
+// ─── POLLING ─────────────────────────────────────────────────────────────────
+let pollTimer = null;
+function startPolling() {
+  if (pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(async ()=>{
+    await dbFetch();
+    applyStoredPlayers();
+    renderHero();
+    // refresh whichever tab is visible
+    if (document.getElementById("tab-leaderboard-content").classList.contains("active")) renderLeaderboard();
+    if (document.getElementById("tab-mybets-content").classList.contains("active")) renderMyBets();
+    if (document.getElementById("tab-admin-content").classList.contains("active")) renderAdmin();
+    // update odds numbers on board without full rebuild
+    players.forEach(p=>{
+      const el = document.getElementById(`onum-${p.id}`);
+      if (!el) return;
+      const prev = prevOdds[p.id];
+      if (prev !== undefined && prev !== p.odds && p.odds !== null) {
+        const btn = document.getElementById(`obtn-${p.id}`);
+        if (btn) {
+          const dir = p.odds > prev ? "flash-up" : "flash-down";
+          btn.classList.add(dir);
+          setTimeout(()=>btn.classList.remove(dir), 600);
+        }
+      }
+      prevOdds[p.id] = p.odds;
+      if (p.status!=="departed") el.textContent = p.display;
+    });
+  }, 8000);
+}
+
+// ─── ODDS DRIFT ──────────────────────────────────────────────────────────────
+let driftTimer = null;
+function startDrift() {
+  if (driftTimer) clearInterval(driftTimer);
+  driftTimer = setInterval(async ()=>{
+    if (Math.random() > 0.35) return; // only ~35% of clients write per tick
+    let changed = false;
+    players.forEach(p=>{
+      if (p.status==="departed") return;
+      const rail = DRIFT_RAILS[p.id];
+      if (!rail || p.odds===null) return;
+      const maxStep = p.id==="syd" ? 25 : 15;
+      const step = Math.floor(Math.random()*maxStep)+5;
+      const meanRevert = Math.random()<0.2;
+      const baseline = PLAYERS.find(x=>x.id===p.id)?.odds || p.odds;
+      let dir = Math.random()<0.5?1:-1;
+      if (meanRevert) dir = baseline > p.odds ? 1 : -1;
+      let next = p.odds + dir*step;
+      // clamp to rail
+      if (next<0) next = Math.max(next, rail[0]);
+      else next = Math.min(next, rail[1]);
+      next = Math.round(next/5)*5;
+      if (next===p.odds) return;
+      changed = true;
+      p.odds = next;
+      p.type = next<0?"neg":"pos";
+      p.display = p.id==="kate" ? `🦉 +${next}?` : next>0?`+${next}`:`${next}`;
+    });
+    if (changed) {
+      syncPlayersToDb();
+      await dbPush();
+      // update DOM
+      players.forEach(p=>{
+        const el = document.getElementById(`onum-${p.id}`);
+        if (el && p.status!=="departed") el.textContent = p.display;
+      });
+    }
+  }, 30000);
+}
+
+// ─── LIVE CLOCK ──────────────────────────────────────────────────────────────
+setInterval(()=>{
+  const n=new Date();
+  const f=t=>String(t).padStart(2,"0");
+  // Could show in hero — just keeping time for freshness signal
+}, 1000);
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+window.addEventListener("DOMContentLoaded", async ()=>{
+  document.getElementById("loginName").addEventListener("keydown", e=>{ if(e.key==="Enter") doLogin(); });
+  document.getElementById("loginAdmin").addEventListener("keydown", e=>{ if(e.key==="Enter") doLogin(); });
+
+  const identity = lsGet();
+  if (identity?.name) {
+    currentUser = identity;
+    await dbFetch();
+    // ensure user still exists in db
+    if (!db.users.find(u=>u.name===currentUser.name)) {
+      db.users.push({name:currentUser.name, balance:STARTING_BAL, joinedAt:Date.now()});
+      await dbPush();
+    }
+    showApp();
+    toast(`Welcome back, ${currentUser.name}! Balance: ${fmtMoney(getMyBalance())}`);
+  }
+});
+</script></body>
+</html>
