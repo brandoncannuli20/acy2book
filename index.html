@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +15,9 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden;}
 input,button{font-family:inherit;}
-input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
+
+/* NAV */
 .nav{background:#0d0d14;border-bottom:1px solid var(–border);padding:0 14px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:200;}
 .logo{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:22px;letter-spacing:1px;color:#fff;cursor:pointer;}
 .logo span{color:var(–green);}
@@ -25,19 +29,24 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
 .live-badge{display:flex;align-items:center;gap:5px;background:rgba(255,59,48,.15);border:1px solid var(–red);color:var(–red);font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:11px;padding:4px 8px;border-radius:4px;}
 .live-dot{width:6px;height:6px;background:var(–red);border-radius:50%;animation:pulse 1.2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+
 /* TABS */
 .tab{display:none;} .tab.active{display:block;}
+
 /* HERO */
 .hero{background:linear-gradient(180deg,#131320 0%,var(–black) 100%);border-bottom:1px solid var(–border);padding:18px 14px 14px;}
 .sport-tag{background:var(–green);color:#000;font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:11px;letter-spacing:1px;padding:2px 8px;border-radius:3px;text-transform:uppercase;display:inline-block;margin-bottom:6px;}
 .hero h1{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:26px;letter-spacing:.5px;line-height:1.1;margin-bottom:6px;}
 .hero-sub{color:var(–muted);font-size:13px;display:flex;gap:14px;flex-wrap:wrap;}
 .hero-sub strong{color:var(–green);}
+
 /* SECTION LABEL */
 .section-label{padding:14px 14px 8px;font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(–muted);display:flex;align-items:center;gap:8px;}
 .section-label::after{content:’’;flex:1;height:1px;background:var(–border);}
+
 /* ODDS LIST */
 .odds-list{padding:0 14px;display:flex;flex-direction:column;gap:2px;}
+
 /* PLAYER CARD */
 .pcard{background:var(–card);border:1px solid var(–border);border-radius:6px;overflow:hidden;transition:border-color .2s;}
 .pcard:hover{border-color:#3a3a55;}
@@ -60,6 +69,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
 .tag.breaking{border-color:rgba(245,166,35,.5);color:var(–gold);background:rgba(245,166,35,.1);animation:blink 1.5s infinite;}
 .tag.friend{border-color:rgba(0,200,83,.5);color:var(–green);background:rgba(0,200,83,.1);}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+
 /* ODDS BTN */
 .odds-btn{border-radius:6px;padding:8px 12px;text-align:center;cursor:pointer;min-width:70px;flex-shrink:0;transition:all .15s;user-select:none;}
 .odds-btn:hover:not(.dead){transform:scale(1.05);}
@@ -80,6 +90,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
 .odds-btn.flash-down{animation:flash-down .5s ease-out;}
 @keyframes flash-up{0%{background:rgba(0,200,83,.35)}100%{background:transparent}}
 @keyframes flash-down{0%{background:rgba(255,59,48,.35)}100%{background:transparent}}
+
 /* EXPAND */
 .expand-toggle{width:100%;background:none;border:none;cursor:pointer;padding:4px 14px 8px;color:var(–muted);font-size:11px;font-weight:600;letter-spacing:.5px;text-align:center;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:5px;transition:color .15s;}
 .expand-toggle:hover{color:var(–text);}
@@ -94,12 +105,14 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
 .prop-odds.neg{color:var(–red);background:rgba(255,59,48,.1);border:1px solid rgba(255,59,48,.2);}
 .prop-odds.pos{color:var(–green);background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.2);}
 .prop-odds:hover{filter:brightness(1.25);}
+
 /* BET SLIP FLOAT */
 .slip-float{position:fixed;bottom:20px;right:14px;background:var(–green);color:#000;font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:14px;padding:12px 16px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,200,83,.3);z-index:300;transition:all .2s;}
 .slip-float:hover{transform:translateY(-2px);}
 .slip-float.hot{animation:pulse-green 2s infinite;}
 @keyframes pulse-green{0%,100%{box-shadow:0 4px 20px rgba(0,200,83,.3)}50%{box-shadow:0 4px 28px rgba(0,200,83,.6)}}
 .slip-count{background:#000;color:var(–green);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;}
+
 /* DRAWER */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:400;display:none;backdrop-filter:blur(2px);}
 .overlay.open{display:block;}
@@ -112,6 +125,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
 .drawer-body{flex:1;overflow-y:auto;padding:12px 16px;}
 .drawer-footer{padding:12px 16px;border-top:1px solid var(–border);}
 .slip-empty{text-align:center;padding:40px 20px;color:var(–muted);font-size:14px;line-height:2;}
+
 /* SLIP ITEM */
 .slip-item{background:var(–card);border:1px solid var(–border);border-radius:8px;padding:12px;margin-bottom:8px;position:relative;}
 .slip-name{font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:16px;}
@@ -134,6 +148,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
 .place-btn:disabled{background:var(–border);color:var(–muted);cursor:not-allowed;}
 .clear-btn{width:100%;background:transparent;color:var(–muted);font-size:12px;padding:8px;border:none;cursor:pointer;margin-top:4px;}
 .clear-btn:hover{color:var(–red);}
+
 /* LEADERBOARD */
 .lb-row{background:var(–card);border:1px solid var(–border);border-radius:8px;padding:12px 14px;margin-bottom:6px;display:flex;align-items:center;gap:12px;}
 .lb-row.gold{background:linear-gradient(135deg,rgba(245,166,35,.15),rgba(245,166,35,.05));border-color:rgba(245,166,35,.4);}
@@ -141,8 +156,10 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
 .lb-name{font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:17px;flex:1;}
 .lb-bal{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:18px;}
 .lb-change{font-size:11px;margin-top:2px;}
+
 /* BET HISTORY ROW */
 .bet-row{background:var(–card);border:1px solid var(–border);border-radius:6px;padding:10px 12px;margin-bottom:4px;}
+
 /* ADMIN */
 .admin-card{background:#1a1a0a;border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:14px;margin-bottom:8px;}
 .admin-btn{font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:13px;padding:7px 14px;border-radius:6px;cursor:pointer;text-transform:uppercase;transition:all .15s;}
@@ -152,6 +169,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
 .stat-box{background:var(–card);border:1px solid var(–border);border-radius:8px;padding:10px 12px;}
 .stat-label{font-size:11px;color:var(–muted);text-transform:uppercase;letter-spacing:.5px;}
 .stat-val{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:22px;margin-top:2px;}
+
 /* LOGIN */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
 .login-box{background:var(–dark);border:1px solid var(–border);border-radius:16px;padding:32px 24px;max-width:340px;width:100%;text-align:center;}
@@ -159,18 +177,21 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
 .field-label{font-size:11px;color:var(–muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:600;display:block;text-align:left;}
 .text-input{width:100%;background:var(–pill);border:1px solid var(–border);color:var(–text);font-size:15px;padding:9px 12px;border-radius:6px;outline:none;transition:border-color .15s;margin-bottom:12px;}
 .text-input:focus{border-color:var(–green);}
+
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .modal-overlay.open{display:flex;}
 .modal-box{background:var(–dark);border:1px solid var(–green);border-radius:16px;padding:32px 24px;max-width:340px;width:90%;text-align:center;animation:popIn .3s cubic-bezier(.34,1.56,.64,1);}
 @keyframes popIn{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
 .modal-btn{background:var(–green);color:#000;border:none;font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:15px;padding:12px 32px;border-radius:8px;cursor:pointer;text-transform:uppercase;}
+
 /* TOAST */
 .toast-wrap{position:fixed;top:62px;right:14px;z-index:700;display:flex;flex-direction:column;gap:5px;pointer-events:none;}
 .toast{background:var(–dark);border:1px solid var(–border);border-left:3px solid var(–green);color:var(–text);font-size:13px;padding:10px 14px;border-radius:6px;min-width:200px;animation:slideIn .3s ease,fadeOut .3s ease 2.7s forwards;box-shadow:0 4px 20px rgba(0,0,0,.4);}
 .toast.red{border-left-color:var(–red);}
 @keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes fadeOut{from{opacity:1}to{opacity:0;transform:translateX(110%)}}
+
 /* TICKER */
 .ticker-wrap{background:#0f0f1a;border-bottom:1px solid var(–border);padding:6px 0;overflow:hidden;}
 .ticker-inner{display:flex;gap:40px;animation:ticker 35s linear infinite;white-space:nowrap;width:max-content;}
@@ -178,13 +199,19 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
 .ticker-item{font-family:‘Barlow Condensed’,sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;}
 .t-up{color:var(–green);} .t-down{color:var(–red);}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
 /* UTIL */
 .pad{padding:0 14px 100px;}
 .mt{margin-top:10px;}
 .footer{padding:20px 14px;text-align:center;color:#333;font-size:11px;border-top:1px solid var(–border);margin-top:16px;line-height:1.8;}
 </style>
+
 </head>
-<body><!-- LOGIN SCREEN --><div id="loginScreen" class="login-wrap">
+<body>
+
+<!-- LOGIN SCREEN -->
+
+<div id="loginScreen" class="login-wrap">
   <div class="login-box">
     <div style="font-size:44px;margin-bottom:10px">🏭</div>
     <h2>ACY<span style="color:var(--green)">2</span>BOOK</h2>
@@ -196,7 +223,15 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
     <button class="place-btn" style="margin-top:4px" onclick="doLogin()">Enter the Book</button>
     <p style="color:#333;font-size:11px;margin-top:16px">Each player starts with $10,000 in fake money.<br>Bets are live and shared with everyone.</p>
   </div>
-</div><!-- MAIN APP (hidden until login) --><div id="app" style="display:none"><!-- NAV --><nav class="nav">
+</div>
+
+<!-- MAIN APP (hidden until login) -->
+
+<div id="app" style="display:none">
+
+  <!-- NAV -->
+
+  <nav class="nav">
     <div class="logo" onclick="scrollTo({top:0,behavior:'smooth'})">ACY<span>2</span>BOOK</div>
     <div class="nav-pills">
       <button class="npill active" id="tab-board" onclick="setTab('board')">Board</button>
@@ -206,7 +241,11 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
       <button class="npill ghost" onclick="doLogout()" title="Switch user">⇄</button>
     </div>
     <div class="live-badge"><div class="live-dot"></div>LIVE</div>
-  </nav><!-- TICKER --><div class="ticker-wrap">
+  </nav>
+
+  <!-- TICKER -->
+
+  <div class="ticker-wrap">
     <div class="ticker-inner" id="ticker">
       <span class="ticker-item"><span>DAVID</span><span class="t-down">CONFIRMED OUT 6/28 ▼</span></span>
       <span class="ticker-item"><span>MATT S</span><span class="t-down">CONFIRMED OUT 6/28 ▼</span></span>
@@ -224,7 +263,11 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
       <span class="ticker-item"><span>CASS</span><span class="t-down">-1200 SHARP MONEY IN</span></span>
       <span class="ticker-item"><span>KATE</span><span>🦉 THE OWL SEES ALL</span></span>
     </div>
-  </div><!-- BOARD TAB --><div class="tab active" id="tab-board-content">
+  </div>
+
+  <!-- BOARD TAB -->
+
+  <div class="tab active" id="tab-board-content">
     <div class="hero">
       <span class="sport-tag">🏭 Operations</span>
       <h1>ACY2 DEPARTURE ODDS BOARD</h1>
@@ -235,6 +278,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
       </div>
     </div>
 
+```
 <div class="section-label">🔴 Confirmed Departures</div>
 <div class="odds-list" id="list-confirmed"></div>
 
@@ -251,9 +295,13 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
   ACY2Book · For entertainment purposes only · Lines updated live<br>
   <span style="color:#2a2a3d">Gambling problem? ACY2's HR has a pamphlet. It is also leaving.</span>
 </div>
+```
 
+  </div>
 
-</div><!-- LEADERBOARD TAB --><div class="tab" id="tab-leaderboard-content">
+  <!-- LEADERBOARD TAB -->
+
+  <div class="tab" id="tab-leaderboard-content">
     <div class="hero"><h1>🏆 LEADERBOARD</h1><div class="hero-sub" id="lb-sub">Loading...</div></div>
     <div class="pad">
       <div class="section-label">Rankings <div style="flex:1;height:1px;background:var(--border)"></div></div>
@@ -261,13 +309,21 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
       <div class="section-label">Recent Bets <div style="flex:1;height:1px;background:var(--border)"></div></div>
       <div id="lb-bets"></div>
     </div>
-  </div><!-- MY BETS TAB --><div class="tab" id="tab-mybets-content">
+  </div>
+
+  <!-- MY BETS TAB -->
+
+  <div class="tab" id="tab-mybets-content">
     <div class="hero"><h1>MY BETS</h1><div class="hero-sub" id="mybets-sub">Loading...</div></div>
     <div class="pad">
       <div class="section-label">Your Bets <div style="flex:1;height:1px;background:var(--border)"></div></div>
       <div id="mybets-list"></div>
     </div>
-  </div><!-- ADMIN TAB --><div class="tab" id="tab-admin-content">
+  </div>
+
+  <!-- ADMIN TAB -->
+
+  <div class="tab" id="tab-admin-content">
     <div class="hero"><h1>⚙️ ADMIN PANEL</h1><div class="hero-sub">Grade departures · Move lines · Settle bets</div></div>
     <div class="pad">
       <div style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--gold)">
@@ -279,10 +335,26 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
       <div id="admin-lines"></div>
       <div class="section-label" style="margin-top:8px">Book Stats <div style="flex:1;height:1px;background:var(--border)"></div></div>
       <div class="stat-grid" id="admin-stats"></div>
+      <div class="section-label" style="margin-top:8px">Danger Zone <div style="flex:1;height:1px;background:var(--border)"></div></div>
+      <div class="admin-card" style="border-color:rgba(255,59,48,.3);background:#1a0a0a">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;margin-bottom:4px;color:var(--red)">Reset Everything</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Wipes all bets, balances, and player statuses. Use for testing or a fresh start. Cannot be undone.</div>
+        <button class="admin-btn red" onclick="confirmReset()">🗑️ Reset All Data</button>
+      </div>
     </div>
-  </div></div><!-- BET SLIP FLOAT --><div class="slip-float" id="slipFloat" onclick="openDrawer()" style="display:none">
+  </div>
+
+</div>
+
+<!-- BET SLIP FLOAT -->
+
+<div class="slip-float" id="slipFloat" onclick="openDrawer()" style="display:none">
   🎟️ BET SLIP <div class="slip-count" id="slipCount">0</div>
-</div><!-- OVERLAY + DRAWER --><div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+</div>
+
+<!-- OVERLAY + DRAWER -->
+
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-handle" onclick="closeDrawer()"></div>
   <div class="drawer-header">
@@ -300,14 +372,24 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}/* NAV */
     <button class="place-btn" id="placeBtn" onclick="placeBets()">Place Bets</button>
     <button class="clear-btn" onclick="clearSlip()">Remove All Selections</button>
   </div>
-</div><!-- CONFIRM MODAL --><div class="modal-overlay" id="modal">
+</div>
+
+<!-- CONFIRM MODAL -->
+
+<div class="modal-overlay" id="modal">
   <div class="modal-box">
     <div style="font-size:48px;margin-bottom:12px">✅</div>
     <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;margin-bottom:8px" id="modalTitle">Bets Placed!</div>
     <div style="color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:20px" id="modalText"></div>
     <button class="modal-btn" onclick="closeModal()">Back to Board</button>
   </div>
-</div><!-- TOAST CONTAINER --><div class="toast-wrap" id="toastWrap"></div><script>
+</div>
+
+<!-- TOAST CONTAINER -->
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 const ADMIN_CODE   = "ACY2ADMIN";
 const STARTING_BAL = 10000;
@@ -935,6 +1017,23 @@ setInterval(()=>{
   // Could show in hero — just keeping time for freshness signal
 }, 1000);
 
+// ─── RESET ───────────────────────────────────────────────────────────────────
+function confirmReset() {
+  if (!confirm("Reset ALL data? This wipes every bet, balance, and player status. Cannot be undone.")) return;
+  if (!confirm("Are you sure? Everyone loses their balance and all bets are deleted.")) return;
+  doReset();
+}
+
+async function doReset() {
+  db = {users:[], bets:[], players:[]};
+  await dbPush();
+  players = JSON.parse(JSON.stringify(PLAYERS));
+  renderBoard();
+  renderAdmin();
+  renderHero();
+  toast("✓ All data reset. Fresh start.");
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 window.addEventListener("DOMContentLoaded", async ()=>{
   document.getElementById("loginName").addEventListener("keydown", e=>{ if(e.key==="Enter") doLogin(); });
@@ -953,5 +1052,7 @@ window.addEventListener("DOMContentLoaded", async ()=>{
     toast(`Welcome back, ${currentUser.name}! Balance: ${fmtMoney(getMyBalance())}`);
   }
 });
-</script></body>
+</script>
+
+</body>
 </html>
