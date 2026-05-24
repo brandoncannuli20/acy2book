@@ -290,6 +290,11 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
       <div id="admin-grade"></div>
       <div class="section-label" style="margin-top:8px">Move Lines <div style="flex:1;height:1px;background:var(--border)"></div></div>
       <div id="admin-lines"></div>
+      <div class="section-label" style="margin-top:8px">Update Analysis <div style="flex:1;height:1px;background:var(--border)"></div></div>
+      <div style="background:rgba(0,200,83,.06);border:1px solid rgba(0,200,83,.2);border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--muted)">
+        📝 Drop in a few raw notes and ACY2Book's AI analyst will rewrite it in Vegas voice.
+      </div>
+      <div id="admin-notes"></div>
       <div class="section-label" style="margin-top:8px">Book Stats <div style="flex:1;height:1px;background:var(--border)"></div></div>
       <div class="stat-grid" id="admin-stats"></div>
       <div class="section-label" style="margin-top:8px">Danger Zone <div style="flex:1;height:1px;background:var(--border)"></div></div>
@@ -458,6 +463,9 @@ function startListener() {
       }
       prevOdds[p.id] = p.odds;
       if (p.status !== "departed") el.textContent = p.display;
+      // update analysis text live
+      const analysisEl = document.getElementById(`analysis-${p.id}`);
+      if (analysisEl) analysisEl.textContent = p.analysis;
     });
     // refresh active tab
     if (document.getElementById("tab-leaderboard-content").classList.contains("active")) renderLeaderboard();
@@ -476,6 +484,7 @@ function applyStoredPlayers() {
     if (sp.odds !== undefined) p.odds = sp.odds;
     if (sp.display) p.display = sp.display;
     if (sp.type) p.type = sp.type;
+    if (sp.analysis) p.analysis = sp.analysis;
   });
 }
 
@@ -577,7 +586,7 @@ function buildCard(p) {
     </div>
     <button class="expand-toggle" onclick="toggleCard('${p.id}')">${isSyd?"▾ Full Analysis":"▾ Analysis"}</button>
     <div class="card-expand">
-      <div class="analysis-text">${p.analysis}</div>
+      <div class="analysis-text" id="analysis-${p.id}">${p.analysis}</div>
       ${propsHtml?`<div>${propsHtml}</div>`:""}
     </div>`;
   return div;
@@ -702,75 +711,141 @@ function renderAdmin() {
       </div>
     </div>`).join("");
 
-  const totalWagered=allBets.reduce((s,b)=>s+b.amount,0);
-  document.getElementById("admin-stats").innerHTML=[
-    {label:"Total Players",val:Object.keys(state.users||{}).length},
-    {label:"Total Bets",val:allBets.length},
-    {label:"Total Wagered",val:fmtMoney(totalWagered)},
-    {label:"Open Bets",val:allBets.filter(b=>b.status==="open").length},
-  ].map(s=>`<div class="stat-box"><div class="stat-label">${s.label}</div><div class="stat-val">${s.val}</div></div>`).join("");
+  document.getElementById("admin-notes").innerHTML=active.map(p=>`
+    <div class="admin-card">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;margin-bottom:4px">${p.name}</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Current: ${p.analysis.substring(0,80)}...</div>
+      <textarea class="text-input" id="notes-${p.id}" rows="3" placeholder="e.g. Had informational with Brian, Brian talked about himself the whole time, line dropping" style="resize:none;margin-bottom:6px"></textarea>
+
+```
+  <button class="admin-btn gold" id="notesbtn-${p.id}" onclick="adminUpdateAnalysis('${p.id}')">✨ Generate & Publish</button>
+</div>`).join("");
+```
+
+const totalWagered=allBets.reduce((s,b)=>s+b.amount,0);
+document.getElementById(“admin-stats”).innerHTML=[
+{label:“Total Players”,val:Object.keys(state.users||{}).length},
+{label:“Total Bets”,val:allBets.length},
+{label:“Total Wagered”,val:fmtMoney(totalWagered)},
+{label:“Open Bets”,val:allBets.filter(b=>b.status===“open”).length},
+].map(s=>`<div class="stat-box"><div class="stat-label">${s.label}</div><div class="stat-val">${s.val}</div></div>`).join(””);
 }
 
 window.gradePlayer = async function(playerId) {
-  const p=players.find(x=>x.id===playerId);
-  if(!p) return;
-  const allBets=Object.values(state.bets||{});
-  const updates={};
-  const winnerMap={};
+const p=players.find(x=>x.id===playerId);
+if(!p) return;
+const allBets=Object.values(state.bets||{});
+const updates={};
+const winnerMap={};
 
-  allBets.forEach(b=>{
-    if(b.playerId!==playerId||b.status!=="open") return;
-    updates[`/bets/${b.id}/status`]="won";
-    updates[`/bets/${b.id}/gradedAt`]=Date.now();
-    const payout=calcPayout(b.amount,b.odds);
-    winnerMap[b.userName]=(winnerMap[b.userName]||0)+payout;
-  });
+allBets.forEach(b=>{
+if(b.playerId!==playerId||b.status!==“open”) return;
+updates[`/bets/${b.id}/status`]=“won”;
+updates[`/bets/${b.id}/gradedAt`]=Date.now();
+const payout=calcPayout(b.amount,b.odds);
+winnerMap[b.userName]=(winnerMap[b.userName]||0)+payout;
+});
 
-  Object.entries(winnerMap).forEach(([name,payout])=>{
-    const u=state.users[name];
-    if(u) updates[`/users/${name}/balance`]=u.balance+payout;
-  });
+Object.entries(winnerMap).forEach(([name,payout])=>{
+const u=state.users[name];
+if(u) updates[`/users/${name}/balance`]=u.balance+payout;
+});
 
-  updates[`/players/${playerId}`]={id:playerId,status:"departed",odds:p.odds,display:p.display,type:p.type};
-  await fbUpdate("/", updates);
-  toast(`✓ ${p.name} marked departed. ${Object.keys(winnerMap).length} winner${Object.keys(winnerMap).length!==1?"s":""} paid out!`);
+updates[`/players/${playerId}`]={id:playerId,status:“departed”,odds:p.odds,display:p.display,type:p.type};
+await fbUpdate(”/”, updates);
+toast(`✓ ${p.name} marked departed. ${Object.keys(winnerMap).length} winner${Object.keys(winnerMap).length!==1?"s":""} paid out!`);
 }
 
 window.adminUpdateOdds = async function(playerId) {
-  const input=document.getElementById(`newodds-${playerId}`);
-  const o=parseInt(input.value.trim().replace("+",""));
-  if(isNaN(o)){toast("Invalid odds",true);return;}
-  const p=players.find(x=>x.id===playerId);
-  if(!p) return;
-  const display=o>0?`+${o}`:`${o}`;
-  await fbSet(`/players/${playerId}`,{id:playerId,status:p.status,odds:o,display,type:o<0?"neg":"pos"});
-  input.value="";
-  toast(`Line updated: ${p.name} → ${display}`);
+const input=document.getElementById(`newodds-${playerId}`);
+const o=parseInt(input.value.trim().replace(”+”,””));
+if(isNaN(o)){toast(“Invalid odds”,true);return;}
+const p=players.find(x=>x.id===playerId);
+if(!p) return;
+const display=o>0?`+${o}`:`${o}`;
+await fbSet(`/players/${playerId}`,{id:playerId,status:p.status,odds:o,display,type:o<0?“neg”:“pos”});
+input.value=””;
+toast(`Line updated: ${p.name} → ${display}`);
+}
+
+window.adminUpdateAnalysis = async function(playerId) {
+const textarea = document.getElementById(`notes-${playerId}`);
+const btn = document.getElementById(`notesbtn-${playerId}`);
+const notes = textarea.value.trim();
+if (!notes) { toast(“Enter some notes first”, true); return; }
+
+const p = players.find(x=>x.id===playerId);
+if (!p) return;
+
+btn.textContent = “⏳ Generating…”;
+btn.disabled = true;
+
+try {
+const response = await fetch(“https://api.anthropic.com/v1/messages”, {
+method: “POST”,
+headers: { “Content-Type”: “application/json” },
+body: JSON.stringify({
+model: “claude-sonnet-4-20250514”,
+max_tokens: 1000,
+messages: [{
+role: “user”,
+content: `You are a snarky, sharp Las Vegas sportsbook analyst writing player analysis for an internal ACY2 fulfillment center departure odds board. It’s a comedy bit between coworkers.
+
+Player: ${p.name}
+Current odds: ${p.display}
+Raw notes from admin: ${notes}
+
+Write a 2-3 sentence analyst blurb in Vegas sportsbook voice — punchy, confident, slightly dramatic, with insider lingo. Reference the notes naturally. Do NOT use bullet points. Do NOT use quotation marks around the whole thing. Just the raw analyst copy, nothing else.`
+}]
+})
+});
+
+```
+const data = await response.json();
+const newAnalysis = data.content?.[0]?.text?.trim();
+if (!newAnalysis) throw new Error("no response");
+
+// Save to firebase
+const sp = state.players[playerId] || {id:playerId, status:p.status, odds:p.odds, display:p.display, type:p.type};
+await fbSet(`/players/${playerId}`, {...sp, analysis: newAnalysis});
+
+textarea.value = "";
+btn.textContent = "✨ Generate & Publish";
+btn.disabled = false;
+toast(`✓ ${p.name}'s analysis updated`);
+```
+
+} catch(e) {
+btn.textContent = “✨ Generate & Publish”;
+btn.disabled = false;
+toast(“Generation failed — try again”, true);
+console.error(e);
+}
 }
 
 window.confirmReset = function() {
-  if(!confirm("Reset ALL data? Wipes every bet and balance. Cannot be undone.")) return;
-  if(!confirm("Are you absolutely sure?")) return;
-  doReset();
+if(!confirm(“Reset ALL data? Wipes every bet and balance. Cannot be undone.”)) return;
+if(!confirm(“Are you absolutely sure?”)) return;
+doReset();
 }
 
 async function doReset() {
-  await fbSet("/",{users:{},bets:{},players:{}});
-  toast("✓ All data reset. Fresh start.");
+await fbSet(”/”,{users:{},bets:{},players:{}});
+toast(“✓ All data reset. Fresh start.”);
 }
 
 // ─── BET SLIP ────────────────────────────────────────────────────────────────
 window.addToSlip = function(name, market, odds, type, playerId) {
-  if(slip.find(b=>b.name===name&&b.market===market)){toast(`Already in slip: ${name}`,true);return;}
-  slip.push({name,market,odds,type,amount:10,playerId});
-  updateSlipUI();
-  openDrawer();
-  toast(`Added: ${name} ${odds}`);
+if(slip.find(b=>b.name===name&&b.market===market)){toast(`Already in slip: ${name}`,true);return;}
+slip.push({name,market,odds,type,amount:10,playerId});
+updateSlipUI();
+openDrawer();
+toast(`Added: ${name} ${odds}`);
 }
 
 window.addToSlipSyd = function() {
-  const live=document.getElementById("onum-syd")?.textContent||"-420";
-  window.addToSlip("Syd","To Depart",live,"neg","syd");
+const live=document.getElementById(“onum-syd”)?.textContent||”-420”;
+window.addToSlip(“Syd”,“To Depart”,live,“neg”,“syd”);
 }
 
 window.removeFromSlip = function(i){slip.splice(i,1);updateSlipUI();}
@@ -779,170 +854,152 @@ window.setAmt = function(i,val){slip[i].amount=val;updateSlipUI();}
 window.clearSlip = function(){slip=[];updateSlipUI();}
 
 function updateSlipUI(partial=false) {
-  const count=slip.length;
-  document.getElementById("slipCount").textContent=count;
-  document.getElementById("slipFloat").className="slip-float"+(count>0?" hot":"");
-  const body=document.getElementById("drawerBody");
-  const footer=document.getElementById("drawerFooter");
+const count=slip.length;
+document.getElementById(“slipCount”).textContent=count;
+document.getElementById(“slipFloat”).className=“slip-float”+(count>0?” hot”:””);
+const body=document.getElementById(“drawerBody”);
+const footer=document.getElementById(“drawerFooter”);
 
-  if(count===0){
-    body.innerHTML=`<div class="slip-empty"><div style="font-size:40px">🎟️</div>Tap any odds button to add a selection.</div>`;
-    footer.style.display="none";
-    return;
-  }
-  footer.style.display="block";
+if(count===0){
+body.innerHTML=`<div class="slip-empty"><div style="font-size:40px">🎟️</div>Tap any odds button to add a selection.</div>`;
+footer.style.display=“none”;
+return;
+}
+footer.style.display=“block”;
 
-  if(!partial){
-    body.innerHTML=slip.map((b,i)=>`
-      <div class="slip-item">
-        <button class="slip-remove" onclick="removeFromSlip(${i})">×</button>
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
-          <div><div class="slip-name">${b.name}</div><div class="slip-market">${b.market}</div></div>
-          <div class="slip-odds-val ${b.type}">${b.odds}</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
-          <span style="font-size:11px;color:var(--muted);white-space:nowrap">Wager $</span>
-          <input class="amt-input" type="number" min="1" value="${b.amount}" oninput="updateAmt(${i},this.value)">
-        </div>
-        <div class="quick-amts">
-          <button class="qamt" onclick="setAmt(${i},10)">$10</button>
-          <button class="qamt" onclick="setAmt(${i},50)">$50</button>
-          <button class="qamt" onclick="setAmt(${i},100)">$100</button>
-          <button class="qamt" onclick="setAmt(${i},500)">$500</button>
-        </div>
-        <div class="slip-payout" id="slippay-${i}">Est. return: ${fmtMoney(calcPayout(b.amount,b.odds))}</div>
-      </div>`).join("");
-  } else {
-    slip.forEach((b,i)=>{
-      const el=document.getElementById(`slippay-${i}`);
-      if(el) el.textContent=`Est. return: ${fmtMoney(calcPayout(b.amount,b.odds))}`;
-    });
-  }
+if(!partial){
+body.innerHTML=slip.map((b,i)=>` <div class="slip-item"> <button class="slip-remove" onclick="removeFromSlip(${i})">×</button> <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px"> <div><div class="slip-name">${b.name}</div><div class="slip-market">${b.market}</div></div> <div class="slip-odds-val ${b.type}">${b.odds}</div> </div> <div style="display:flex;align-items:center;gap:8px;margin-top:8px"> <span style="font-size:11px;color:var(--muted);white-space:nowrap">Wager $</span> <input class="amt-input" type="number" min="1" value="${b.amount}" oninput="updateAmt(${i},this.value)"> </div> <div class="quick-amts"> <button class="qamt" onclick="setAmt(${i},10)">$10</button> <button class="qamt" onclick="setAmt(${i},50)">$50</button> <button class="qamt" onclick="setAmt(${i},100)">$100</button> <button class="qamt" onclick="setAmt(${i},500)">$500</button> </div> <div class="slip-payout" id="slippay-${i}">Est. return: ${fmtMoney(calcPayout(b.amount,b.odds))}</div> </div>`).join(””);
+} else {
+slip.forEach((b,i)=>{
+const el=document.getElementById(`slippay-${i}`);
+if(el) el.textContent=`Est. return: ${fmtMoney(calcPayout(b.amount,b.odds))}`;
+});
+}
 
-  const total=slip.reduce((s,b)=>s+(parseFloat(b.amount)||0),0);
-  const payout=slip.reduce((s,b)=>s+calcPayout(parseFloat(b.amount)||0,b.odds),0);
-  const bal=getMyBalance();
-  document.getElementById("totalWagered").textContent=fmtMoney(total);
-  document.getElementById("totalPayout").textContent=fmtMoney(payout);
-  document.getElementById("balWarning").style.display=total>bal?"block":"none";
-  document.getElementById("placeBtn").disabled=count===0||total<=0||total>bal;
+const total=slip.reduce((s,b)=>s+(parseFloat(b.amount)||0),0);
+const payout=slip.reduce((s,b)=>s+calcPayout(parseFloat(b.amount)||0,b.odds),0);
+const bal=getMyBalance();
+document.getElementById(“totalWagered”).textContent=fmtMoney(total);
+document.getElementById(“totalPayout”).textContent=fmtMoney(payout);
+document.getElementById(“balWarning”).style.display=total>bal?“block”:“none”;
+document.getElementById(“placeBtn”).disabled=count===0||total<=0||total>bal;
 }
 
 window.placeBets = async function() {
-  const bal=getMyBalance();
-  const total=slip.reduce((s,b)=>s+(parseFloat(b.amount)||0),0);
-  if(total>bal){toast("Exceeds balance!",true);return;}
+const bal=getMyBalance();
+const total=slip.reduce((s,b)=>s+(parseFloat(b.amount)||0),0);
+if(total>bal){toast(“Exceeds balance!”,true);return;}
 
-  const updates={};
-  slip.forEach(b=>{
-    const id=`bet_${Date.now()}_${Math.random().toString(36).substr(2,6)}`;
-    updates[`/bets/${id}`]={
-      id, userName:currentUser.name, playerId:b.playerId,
-      name:b.name, market:b.market, odds:b.odds, type:b.type,
-      amount:parseFloat(b.amount)||0, status:"open", timestamp:Date.now()
-    };
-  });
-  updates[`/users/${currentUser.name}/balance`]=bal-total;
-  await fbUpdate("/",updates);
+const updates={};
+slip.forEach(b=>{
+const id=`bet_${Date.now()}_${Math.random().toString(36).substr(2,6)}`;
+updates[`/bets/${id}`]={
+id, userName:currentUser.name, playerId:b.playerId,
+name:b.name, market:b.market, odds:b.odds, type:b.type,
+amount:parseFloat(b.amount)||0, status:“open”, timestamp:Date.now()
+};
+});
+updates[`/users/${currentUser.name}/balance`]=bal-total;
+await fbUpdate(”/”,updates);
 
-  const count=slip.length;
-  slip=[];
-  closeDrawer();
-  updateSlipUI();
+const count=slip.length;
+slip=[];
+closeDrawer();
+updateSlipUI();
 
-  document.getElementById("modalTitle").textContent="Bets Placed! 🎉";
-  document.getElementById("modalText").textContent=`${count} bet${count>1?"s":""} placed. ${fmtMoney(total)} wagered. New balance: ${fmtMoney(bal-total)}`;
-  document.getElementById("modal").classList.add("open");
+document.getElementById(“modalTitle”).textContent=“Bets Placed! 🎉”;
+document.getElementById(“modalText”).textContent=`${count} bet${count>1?"s":""} placed. ${fmtMoney(total)} wagered. New balance: ${fmtMoney(bal-total)}`;
+document.getElementById(“modal”).classList.add(“open”);
 }
 
 // ─── DRAWER ───────────────────────────────────────────────────────────────────
 window.openDrawer = function(){
-  document.getElementById("overlay").classList.add("open");
-  document.getElementById("drawer").classList.add("open");
-  updateSlipUI();
+document.getElementById(“overlay”).classList.add(“open”);
+document.getElementById(“drawer”).classList.add(“open”);
+updateSlipUI();
 }
 window.closeDrawer = function(){
-  document.getElementById("overlay").classList.remove("open");
-  document.getElementById("drawer").classList.remove("open");
+document.getElementById(“overlay”).classList.remove(“open”);
+document.getElementById(“drawer”).classList.remove(“open”);
 }
-window.closeModal = function(){document.getElementById("modal").classList.remove("open");}
+window.closeModal = function(){document.getElementById(“modal”).classList.remove(“open”);}
 
 // ─── ODDS DRIFT ──────────────────────────────────────────────────────────────
 function startDrift() {
-  if(driftTimer) clearInterval(driftTimer);
-  driftTimer=setInterval(async()=>{
-    if(Math.random()>0.3) return;
-    let changed=false;
-    const updates={};
-    players.forEach(p=>{
-      if(p.status==="departed") return;
-      const rail=DRIFT_RAILS[p.id];
-      if(!rail||p.odds===null) return;
-      const step=Math.floor(Math.random()*(p.id==="syd"?25:15))+5;
-      const meanRevert=Math.random()<0.2;
-      const baseline=PLAYERS.find(x=>x.id===p.id)?.odds||p.odds;
-      let dir=Math.random()<0.5?1:-1;
-      if(meanRevert) dir=baseline>p.odds?1:-1;
-      let next=p.odds+dir*step;
-      if(next<0) next=Math.max(next,rail[0]);
-      else next=Math.min(next,rail[1]);
-      next=Math.round(next/5)*5;
-      if(next===p.odds) return;
-      changed=true;
-      const display=p.id==="kate"?`🦉 +${next}?`:next>0?`+${next}`:`${next}`;
-      updates[`/players/${p.id}`]={id:p.id,status:p.status,odds:next,display,type:next<0?"neg":"pos"};
-    });
-    if(changed) await fbUpdate("/",updates);
-  },30000);
+if(driftTimer) clearInterval(driftTimer);
+driftTimer=setInterval(async()=>{
+if(Math.random()>0.3) return;
+let changed=false;
+const updates={};
+players.forEach(p=>{
+if(p.status===“departed”) return;
+const rail=DRIFT_RAILS[p.id];
+if(!rail||p.odds===null) return;
+const step=Math.floor(Math.random()*(p.id===“syd”?25:15))+5;
+const meanRevert=Math.random()<0.2;
+const baseline=PLAYERS.find(x=>x.id===p.id)?.odds||p.odds;
+let dir=Math.random()<0.5?1:-1;
+if(meanRevert) dir=baseline>p.odds?1:-1;
+let next=p.odds+dir*step;
+if(next<0) next=Math.max(next,rail[0]);
+else next=Math.min(next,rail[1]);
+next=Math.round(next/5)*5;
+if(next===p.odds) return;
+changed=true;
+const display=p.id===“kate”?`🦉 +${next}?`:next>0?`+${next}`:`${next}`;
+updates[`/players/${p.id}`]={id:p.id,status:p.status,odds:next,display,type:next<0?“neg”:“pos”};
+});
+if(changed) await fbUpdate(”/”,updates);
+},30000);
 }
 
 // ─── PWA ─────────────────────────────────────────────────────────────────────
 let deferredPrompt=null;
-window.addEventListener("beforeinstallprompt",e=>{
-  e.preventDefault();
-  deferredPrompt=e;
-  if(currentUser) showInstallPrompt();
+window.addEventListener(“beforeinstallprompt”,e=>{
+e.preventDefault();
+deferredPrompt=e;
+if(currentUser) showInstallPrompt();
 });
 
 function showInstallPrompt() {
-  const banner=document.getElementById("installBanner");
-  const dismissed=localStorage.getItem("acy2:installDismissed");
-  if(deferredPrompt&&!dismissed) banner.style.display="flex";
-  else if(/iPhone|iPad/.test(navigator.userAgent)&&!navigator.standalone&&!dismissed) {
-    document.querySelector(".install-banner-text").innerHTML="<strong>📲 Add to Home Screen</strong>Tap Share → Add to Home Screen";
-    document.querySelector(".install-btn").style.display="none";
-    banner.style.display="flex";
-  }
+const banner=document.getElementById(“installBanner”);
+const dismissed=localStorage.getItem(“acy2:installDismissed”);
+if(deferredPrompt&&!dismissed) banner.style.display=“flex”;
+else if(/iPhone|iPad/.test(navigator.userAgent)&&!navigator.standalone&&!dismissed) {
+document.querySelector(”.install-banner-text”).innerHTML=”<strong>📲 Add to Home Screen</strong>Tap Share → Add to Home Screen”;
+document.querySelector(”.install-btn”).style.display=“none”;
+banner.style.display=“flex”;
+}
 }
 
 window.installApp = async function() {
-  if(!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const result=await deferredPrompt.userChoice;
-  deferredPrompt=null;
-  document.getElementById("installBanner").style.display="none";
+if(!deferredPrompt) return;
+deferredPrompt.prompt();
+const result=await deferredPrompt.userChoice;
+deferredPrompt=null;
+document.getElementById(“installBanner”).style.display=“none”;
 }
 
 window.dismissInstall = function() {
-  localStorage.setItem("acy2:installDismissed","1");
-  document.getElementById("installBanner").style.display="none";
+localStorage.setItem(“acy2:installDismissed”,“1”);
+document.getElementById(“installBanner”).style.display=“none”;
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-document.getElementById("loginName").addEventListener("keydown",e=>{if(e.key==="Enter") window.doLogin();});
-document.getElementById("loginAdmin").addEventListener("keydown",e=>{if(e.key==="Enter") window.doLogin();});
+document.getElementById(“loginName”).addEventListener(“keydown”,e=>{if(e.key===“Enter”) window.doLogin();});
+document.getElementById(“loginAdmin”).addEventListener(“keydown”,e=>{if(e.key===“Enter”) window.doLogin();});
 
 const identity=lsGet();
 if(identity?.name){
-  currentUser=identity;
-  showApp();
-  // check if user exists in firebase
-  fbGet(`/users/${currentUser.name}`).then(existing=>{
-    if(!existing){
-      fbSet(`/users/${currentUser.name}`,{name:currentUser.name,balance:STARTING_BAL,joinedAt:Date.now()});
-    }
-    toast(`Welcome back, ${currentUser.name}!`);
-  });
+currentUser=identity;
+showApp();
+// check if user exists in firebase
+fbGet(`/users/${currentUser.name}`).then(existing=>{
+if(!existing){
+fbSet(`/users/${currentUser.name}`,{name:currentUser.name,balance:STARTING_BAL,joinedAt:Date.now()});
+}
+toast(`Welcome back, ${currentUser.name}!`);
+});
 }
 </script>
 
