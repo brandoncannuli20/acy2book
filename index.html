@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -19,175 +18,173 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden;}
-input,button{font-family:inherit;}
+input,button,textarea{font-family:inherit;}
 input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
 
-.nav{background:#0d0d14;border-bottom:1px solid var(–border);padding:0 14px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:200;}
-.logo{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:22px;letter-spacing:1px;color:#fff;cursor:pointer;}
-.logo span{color:var(–green);}
+.nav{background:#0d0d14;border-bottom:1px solid var(--border);padding:0 14px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:200;}
+.logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;letter-spacing:1px;color:#fff;cursor:pointer;}
+.logo span{color:var(--green);}
 .nav-pills{display:flex;gap:3px;}
-.npill{background:var(–pill);border:1px solid var(–border);color:var(–muted);font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:12px;padding:5px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase;transition:all .15s;}
-.npill.active,.npill:hover{background:var(–green);color:#000;border-color:var(–green);}
+.npill{background:var(--pill);border:1px solid var(--border);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;padding:5px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase;transition:all .15s;}
+.npill.active,.npill:hover{background:var(--green);color:#000;border-color:var(--green);}
 .npill.ghost{color:#444;font-size:11px;padding:5px 7px;}
-.npill.ghost:hover{color:var(–muted);background:var(–pill);}
-.live-badge{display:flex;align-items:center;gap:5px;background:rgba(255,59,48,.15);border:1px solid var(–red);color:var(–red);font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:11px;padding:4px 8px;border-radius:4px;}
-.live-dot{width:6px;height:6px;background:var(–red);border-radius:50%;animation:pulse 1.2s infinite;}
+.npill.ghost:hover{color:var(--muted);background:var(--pill);}
+.live-badge{display:flex;align-items:center;gap:5px;background:rgba(255,59,48,.15);border:1px solid var(--red);color:var(--red);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;padding:4px 8px;border-radius:4px;}
+.live-dot{width:6px;height:6px;background:var(--red);border-radius:50%;animation:pulse 1.2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
 
 .tab{display:none;} .tab.active{display:block;}
 
-.hero{background:linear-gradient(180deg,#131320 0%,var(–black) 100%);border-bottom:1px solid var(–border);padding:18px 14px 14px;}
-.sport-tag{background:var(–green);color:#000;font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:11px;letter-spacing:1px;padding:2px 8px;border-radius:3px;text-transform:uppercase;display:inline-block;margin-bottom:6px;}
-.hero h1{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:26px;letter-spacing:.5px;line-height:1.1;margin-bottom:6px;}
-.hero-sub{color:var(–muted);font-size:13px;display:flex;gap:14px;flex-wrap:wrap;}
-.hero-sub strong{color:var(–green);}
+.hero{background:linear-gradient(180deg,#131320 0%,var(--black) 100%);border-bottom:1px solid var(--border);padding:18px 14px 14px;}
+.sport-tag{background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;letter-spacing:1px;padding:2px 8px;border-radius:3px;text-transform:uppercase;display:inline-block;margin-bottom:6px;}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;letter-spacing:.5px;line-height:1.1;margin-bottom:6px;}
+.hero-sub{color:var(--muted);font-size:13px;display:flex;gap:14px;flex-wrap:wrap;}
+.hero-sub strong{color:var(--green);}
 
-.section-label{padding:14px 14px 8px;font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(–muted);display:flex;align-items:center;gap:8px;}
-.section-label::after{content:’’;flex:1;height:1px;background:var(–border);}
+.section-label{padding:14px 14px 8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
 
 .odds-list{padding:0 14px;display:flex;flex-direction:column;gap:2px;}
 
-.pcard{background:var(–card);border:1px solid var(–border);border-radius:6px;overflow:hidden;transition:border-color .2s;}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s;}
 .pcard:hover{border-color:#3a3a55;}
 .pcard.confirmed{border-color:rgba(255,59,48,.3);opacity:.88;}
 .pcard.lock{border-color:rgba(245,166,35,.3);background:linear-gradient(135deg,#1f1f2e,#1d1a2a);}
 .pcard.syd{border-color:rgba(0,200,83,.35);}
 .card-main{display:flex;align-items:center;padding:12px 14px;gap:12px;cursor:pointer;}
-.avatar{width:42px;height:42px;border-radius:50%;background:var(–pill);display:flex;align-items:center;justify-content:center;font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:15px;flex-shrink:0;border:2px solid var(–border);position:relative;}
-.pcard.confirmed .avatar{border-color:var(–red);}
-.pcard.lock .avatar{border-color:var(–gold);}
-.pcard.syd .avatar{border-color:var(–green);background:linear-gradient(135deg,#003d1a,#001a0a);}
-.status-dot{position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;border:2px solid var(–card);}
-.dot-hot{background:var(–red);} .dot-warm{background:var(–gold);} .dot-cold{background:var(–blue);} .dot-gone{background:#555;}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--pill);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;flex-shrink:0;border:2px solid var(--border);position:relative;}
+.pcard.confirmed .avatar{border-color:var(--red);}
+.pcard.lock .avatar{border-color:var(--gold);}
+.pcard.syd .avatar{border-color:var(--green);background:linear-gradient(135deg,#003d1a,#001a0a);}
+.status-dot{position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;border:2px solid var(--card);}
+.dot-hot{background:var(--red);} .dot-warm{background:var(--gold);} .dot-cold{background:var(--blue);} .dot-gone{background:#555;}
 .player-info{flex:1;min-width:0;}
-.player-name{font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:17px;line-height:1;margin-bottom:3px;display:flex;align-items:center;gap:5px;}
+.player-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;line-height:1;margin-bottom:3px;display:flex;align-items:center;gap:5px;}
 .player-tags{display:flex;gap:4px;flex-wrap:wrap;}
-.tag{background:var(–pill);border:1px solid var(–border);color:var(–muted);font-size:10px;font-weight:600;letter-spacing:.3px;padding:2px 6px;border-radius:3px;text-transform:uppercase;}
+.tag{background:var(--pill);border:1px solid var(--border);color:var(--muted);font-size:10px;font-weight:600;letter-spacing:.3px;padding:2px 6px;border-radius:3px;text-transform:uppercase;}
 .tag.hot{border-color:rgba(255,59,48,.5);color:#ff6b63;background:rgba(255,59,48,.1);}
 .tag.confirmed{border-color:rgba(255,59,48,.5);color:#ff6b63;background:rgba(255,59,48,.1);}
-.tag.breaking{border-color:rgba(245,166,35,.5);color:var(–gold);background:rgba(245,166,35,.1);animation:blink 1.5s infinite;}
-.tag.friend{border-color:rgba(0,200,83,.5);color:var(–green);background:rgba(0,200,83,.1);}
+.tag.breaking{border-color:rgba(245,166,35,.5);color:var(--gold);background:rgba(245,166,35,.1);animation:blink 1.5s infinite;}
+.tag.friend{border-color:rgba(0,200,83,.5);color:var(--green);background:rgba(0,200,83,.1);}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
 
 .odds-btn{border-radius:6px;padding:8px 12px;text-align:center;cursor:pointer;min-width:70px;flex-shrink:0;transition:all .15s;user-select:none;}
 .odds-btn:hover:not(.dead){transform:scale(1.05);}
 .odds-btn.neg{background:#2d1a1a;border:1px solid #4e2a2a;}
-.odds-btn.neg:hover{border-color:var(–red);}
+.odds-btn.neg:hover{border-color:var(--red);}
 .odds-btn.pos{background:#1a2d1a;border:1px solid #2a4e2a;}
-.odds-btn.pos:hover{border-color:var(–green);}
+.odds-btn.pos:hover{border-color:var(--green);}
 .odds-btn.lockbtn{background:#2a2310;border:1px solid #4e3f10;}
 .odds-btn.dead{background:#1a0a0a;border:1px solid #4e0a0a;cursor:not-allowed;}
-.odds-label{font-size:10px;font-weight:600;color:var(–muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px;}
-.odds-num{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:21px;line-height:1;}
-.odds-btn.neg .odds-num{color:var(–red);}
-.odds-btn.pos .odds-num{color:var(–green);}
-.odds-btn.lockbtn .odds-num{color:var(–gold);font-size:17px;}
+.odds-label{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px;}
+.odds-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:21px;line-height:1;}
+.odds-btn.neg .odds-num{color:var(--red);}
+.odds-btn.pos .odds-num{color:var(--green);}
+.odds-btn.lockbtn .odds-num{color:var(--gold);font-size:17px;}
 .odds-btn.dead .odds-num{color:#ff2020;font-size:16px;}
 .odds-btn.flash-up{animation:flash-up .5s ease-out;}
 .odds-btn.flash-down{animation:flash-down .5s ease-out;}
 @keyframes flash-up{0%{background:rgba(0,200,83,.35)}100%{background:transparent}}
 @keyframes flash-down{0%{background:rgba(255,59,48,.35)}100%{background:transparent}}
 
-.expand-toggle{width:100%;background:none;border:none;cursor:pointer;padding:4px 14px 8px;color:var(–muted);font-size:11px;font-weight:600;letter-spacing:.5px;text-align:center;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:5px;}
-.card-expand{border-top:1px solid var(–border);background:rgba(0,0,0,.2);padding:10px 14px;display:none;}
+.expand-toggle{width:100%;background:none;border:none;cursor:pointer;padding:4px 14px 8px;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.5px;text-align:center;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:5px;}
+.card-expand{border-top:1px solid var(--border);background:rgba(0,0,0,.2);padding:10px 14px;display:none;}
 .pcard.open .card-expand{display:block;}
-.analysis-text{font-size:13px;color:var(–muted);line-height:1.6;margin-bottom:10px;}
+.analysis-text{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px;}
 .prop-row{display:flex;align-items:center;justify-content:space-between;padding:6px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;border-radius:4px;transition:background .15s;}
 .prop-row:hover{background:rgba(255,255,255,.04);}
 .prop-row:last-child{border-bottom:none;}
-.prop-label{font-size:12px;color:var(–text);flex:1;}
-.prop-odds{font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:14px;padding:3px 8px;border-radius:4px;}
-.prop-odds.neg{color:var(–red);background:rgba(255,59,48,.1);border:1px solid rgba(255,59,48,.2);}
-.prop-odds.pos{color:var(–green);background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.2);}
+.prop-label{font-size:12px;color:var(--text);flex:1;}
+.prop-odds{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;padding:3px 8px;border-radius:4px;}
+.prop-odds.neg{color:var(--red);background:rgba(255,59,48,.1);border:1px solid rgba(255,59,48,.2);}
+.prop-odds.pos{color:var(--green);background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.2);}
 
-.slip-float{position:fixed;bottom:20px;right:14px;background:var(–green);color:#000;font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:14px;padding:12px 16px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,200,83,.3);z-index:300;transition:all .2s;}
+.slip-float{position:fixed;bottom:20px;right:14px;background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;padding:12px 16px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,200,83,.3);z-index:300;transition:all .2s;}
 .slip-float.hot{animation:pulse-green 2s infinite;}
 @keyframes pulse-green{0%,100%{box-shadow:0 4px 20px rgba(0,200,83,.3)}50%{box-shadow:0 4px 28px rgba(0,200,83,.6)}}
-.slip-count{background:#000;color:var(–green);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;}
+.slip-count{background:#000;color:var(--green);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;}
 
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:400;display:none;backdrop-filter:blur(2px);}
 .overlay.open{display:block;}
-.drawer{position:fixed;bottom:0;left:0;right:0;background:var(–dark);border-top:2px solid var(–green);border-radius:16px 16px 0 0;z-index:500;max-height:88vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.drawer{position:fixed;bottom:0;left:0;right:0;background:var(--dark);border-top:2px solid var(--green);border-radius:16px 16px 0 0;z-index:500;max-height:88vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
 .drawer.open{transform:translateY(0);}
-.drawer-handle{width:40px;height:4px;background:var(–border);border-radius:2px;margin:10px auto 0;cursor:pointer;}
-.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(–border);}
-.drawer-title{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:18px;}
-.drawer-close{background:var(–pill);border:1px solid var(–border);color:var(–muted);font-size:18px;width:32px;height:32px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.drawer-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 0;cursor:pointer;}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
+.drawer-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;}
+.drawer-close{background:var(--pill);border:1px solid var(--border);color:var(--muted);font-size:18px;width:32px;height:32px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .drawer-body{flex:1;overflow-y:auto;padding:12px 16px;}
-.drawer-footer{padding:12px 16px;border-top:1px solid var(–border);}
-.slip-empty{text-align:center;padding:40px 20px;color:var(–muted);font-size:14px;line-height:2;}
+.drawer-footer{padding:12px 16px;border-top:1px solid var(--border);}
+.slip-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;line-height:2;}
 
-.slip-item{background:var(–card);border:1px solid var(–border);border-radius:8px;padding:12px;margin-bottom:8px;position:relative;}
-.slip-name{font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:16px;}
-.slip-market{font-size:11px;color:var(–muted);margin-top:2px;}
-.slip-odds-val{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:20px;}
-.slip-odds-val.neg{color:var(–red);} .slip-odds-val.pos{color:var(–green);}
-.slip-remove{position:absolute;top:8px;right:8px;background:none;border:none;color:var(–muted);cursor:pointer;font-size:16px;padding:2px 5px;border-radius:4px;}
-.amt-input{background:var(–pill);border:1px solid var(–border);color:var(–text);font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:16px;padding:6px 10px;border-radius:6px;outline:none;width:90px;}
-.amt-input:focus{border-color:var(–green);}
+.slip-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;position:relative;}
+.slip-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;}
+.slip-market{font-size:11px;color:var(--muted);margin-top:2px;}
+.slip-odds-val{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;}
+.slip-odds-val.neg{color:var(--red);} .slip-odds-val.pos{color:var(--green);}
+.slip-remove{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:2px 5px;border-radius:4px;}
+.amt-input{background:var(--pill);border:1px solid var(--border);color:var(--text);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;padding:6px 10px;border-radius:6px;outline:none;width:90px;}
+.amt-input:focus{border-color:var(--green);}
 .quick-amts{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;}
-.qamt{background:var(–pill);border:1px solid var(–border);color:var(–muted);font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:12px;padding:3px 8px;border-radius:4px;cursor:pointer;}
-.qamt:hover{border-color:var(–green);color:var(–green);}
-.slip-payout{font-size:12px;color:var(–green);margin-top:4px;}
+.qamt{background:var(--pill);border:1px solid var(--border);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;padding:3px 8px;border-radius:4px;cursor:pointer;}
+.qamt:hover{border-color:var(--green);color:var(--green);}
+.slip-payout{font-size:12px;color:var(--green);margin-top:4px;}
 .total-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px;}
-.total-row .lbl{color:var(–muted);}
-.total-row .val{font-family:‘Barlow Condensed’,sans-serif;font-weight:700;}
-.place-btn{width:100%;background:var(–green);color:#000;font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:16px;padding:14px;border:none;border-radius:8px;cursor:pointer;margin-top:10px;text-transform:uppercase;}
-.place-btn:disabled{background:var(–border);color:var(–muted);cursor:not-allowed;}
-.clear-btn{width:100%;background:transparent;color:var(–muted);font-size:12px;padding:8px;border:none;cursor:pointer;margin-top:4px;}
+.total-row .lbl{color:var(--muted);}
+.total-row .val{font-family:'Barlow Condensed',sans-serif;font-weight:700;}
+.place-btn{width:100%;background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;padding:14px;border:none;border-radius:8px;cursor:pointer;margin-top:10px;text-transform:uppercase;}
+.place-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
+.clear-btn{width:100%;background:transparent;color:var(--muted);font-size:12px;padding:8px;border:none;cursor:pointer;margin-top:4px;}
 
-.lb-row{background:var(–card);border:1px solid var(–border);border-radius:8px;padding:12px 14px;margin-bottom:6px;display:flex;align-items:center;gap:12px;}
+.lb-row{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:6px;display:flex;align-items:center;gap:12px;}
 .lb-row.gold{background:linear-gradient(135deg,rgba(245,166,35,.15),rgba(245,166,35,.05));border-color:rgba(245,166,35,.4);}
-.lb-rank{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:22px;width:30px;text-align:center;flex-shrink:0;}
-.lb-name{font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:17px;flex:1;}
-.lb-bal{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:18px;}
+.lb-rank{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;width:30px;text-align:center;flex-shrink:0;}
+.lb-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;flex:1;}
+.lb-bal{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;}
 .lb-change{font-size:11px;margin-top:2px;}
-.bet-row{background:var(–card);border:1px solid var(–border);border-radius:6px;padding:10px 12px;margin-bottom:4px;}
+.bet-row{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:4px;}
 
 .admin-card{background:#1a1a0a;border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:14px;margin-bottom:8px;}
-.admin-btn{font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:13px;padding:7px 14px;border-radius:6px;cursor:pointer;text-transform:uppercase;}
-.admin-btn.red{background:rgba(255,59,48,.15);border:1px solid rgba(255,59,48,.4);color:var(–red);}
-.admin-btn.gold{background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.4);color:var(–gold);}
+.admin-btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;padding:7px 14px;border-radius:6px;cursor:pointer;text-transform:uppercase;}
+.admin-btn.red{background:rgba(255,59,48,.15);border:1px solid rgba(255,59,48,.4);color:var(--red);}
+.admin-btn.gold{background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.4);color:var(--gold);}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
-.stat-box{background:var(–card);border:1px solid var(–border);border-radius:8px;padding:10px 12px;}
-.stat-label{font-size:11px;color:var(–muted);text-transform:uppercase;letter-spacing:.5px;}
-.stat-val{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:22px;margin-top:2px;}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.stat-val{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;margin-top:2px;}
 
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
-.login-box{background:var(–dark);border:1px solid var(–border);border-radius:16px;padding:32px 24px;max-width:340px;width:100%;text-align:center;}
-.login-box h2{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:28px;margin-bottom:4px;}
-.field-label{font-size:11px;color:var(–muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:600;display:block;text-align:left;}
-.text-input{width:100%;background:var(–pill);border:1px solid var(–border);color:var(–text);font-size:15px;padding:9px 12px;border-radius:6px;outline:none;transition:border-color .15s;margin-bottom:12px;}
-.text-input:focus{border-color:var(–green);}
+.login-box{background:var(--dark);border:1px solid var(--border);border-radius:16px;padding:32px 24px;max-width:340px;width:100%;text-align:center;}
+.login-box h2{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;margin-bottom:4px;}
+.field-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:600;display:block;text-align:left;}
+.text-input{width:100%;background:var(--pill);border:1px solid var(--border);color:var(--text);font-size:15px;padding:9px 12px;border-radius:6px;outline:none;transition:border-color .15s;margin-bottom:12px;}
+.text-input:focus{border-color:var(--green);}
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .modal-overlay.open{display:flex;}
-.modal-box{background:var(–dark);border:1px solid var(–green);border-radius:16px;padding:32px 24px;max-width:340px;width:90%;text-align:center;}
-.modal-btn{background:var(–green);color:#000;border:none;font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:15px;padding:12px 32px;border-radius:8px;cursor:pointer;text-transform:uppercase;}
+.modal-box{background:var(--dark);border:1px solid var(--green);border-radius:16px;padding:32px 24px;max-width:340px;width:90%;text-align:center;}
+.modal-btn{background:var(--green);color:#000;border:none;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;padding:12px 32px;border-radius:8px;cursor:pointer;text-transform:uppercase;}
 
 .toast-wrap{position:fixed;top:62px;right:14px;z-index:700;display:flex;flex-direction:column;gap:5px;pointer-events:none;}
-.toast{background:var(–dark);border:1px solid var(–border);border-left:3px solid var(–green);color:var(–text);font-size:13px;padding:10px 14px;border-radius:6px;min-width:200px;animation:slideIn .3s ease,fadeOut .3s ease 2.7s forwards;box-shadow:0 4px 20px rgba(0,0,0,.4);}
-.toast.red{border-left-color:var(–red);}
+.toast{background:var(--dark);border:1px solid var(--border);border-left:3px solid var(--green);color:var(--text);font-size:13px;padding:10px 14px;border-radius:6px;min-width:200px;animation:slideIn .3s ease,fadeOut .3s ease 2.7s forwards;box-shadow:0 4px 20px rgba(0,0,0,.4);}
+.toast.red{border-left-color:var(--red);}
 @keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes fadeOut{from{opacity:1}to{opacity:0;transform:translateX(110%)}}
 
-.ticker-wrap{background:#0f0f1a;border-bottom:1px solid var(–border);padding:6px 0;overflow:hidden;}
+.ticker-wrap{background:#0f0f1a;border-bottom:1px solid var(--border);padding:6px 0;overflow:hidden;}
 .ticker-inner{display:flex;gap:40px;animation:ticker 35s linear infinite;white-space:nowrap;width:max-content;}
-.ticker-item{font-family:‘Barlow Condensed’,sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;}
-.t-up{color:var(–green);} .t-down{color:var(–red);}
+.ticker-item{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;}
+.t-up{color:var(--green);} .t-down{color:var(--red);}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 .pad{padding:0 14px 100px;}
-.footer{padding:20px 14px;text-align:center;color:#333;font-size:11px;border-top:1px solid var(–border);margin-top:16px;line-height:1.8;}
+.footer{padding:20px 14px;text-align:center;color:#333;font-size:11px;border-top:1px solid var(--border);margin-top:16px;line-height:1.8;}
 
-/* PWA install banner */
 .install-banner{background:linear-gradient(135deg,#1a2d1a,#131320);border:1px solid rgba(0,200,83,.3);border-radius:8px;padding:10px 14px;margin:10px 14px 0;display:flex;align-items:center;justify-content:space-between;gap:10px;}
-.install-banner-text{font-size:12px;color:var(–muted);}
-.install-banner-text strong{color:var(–green);display:block;font-size:13px;margin-bottom:2px;}
-.install-btn{background:var(–green);color:#000;border:none;font-family:‘Barlow Condensed’,sans-serif;font-weight:800;font-size:12px;padding:6px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;}
-.install-close{background:none;border:none;color:var(–muted);cursor:pointer;font-size:18px;padding:0 4px;}
+.install-banner-text{font-size:12px;color:var(--muted);}
+.install-banner-text strong{color:var(--green);display:block;font-size:13px;margin-bottom:2px;}
+.install-btn{background:var(--green);color:#000;border:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;padding:6px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;}
+.install-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 4px;}
 </style>
-
 </head>
 <body>
 
@@ -290,6 +287,11 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
       <div id="admin-grade"></div>
       <div class="section-label" style="margin-top:8px">Move Lines <div style="flex:1;height:1px;background:var(--border)"></div></div>
       <div id="admin-lines"></div>
+      <div class="section-label" style="margin-top:8px">Update Analysis <div style="flex:1;height:1px;background:var(--border)"></div></div>
+      <div style="background:rgba(0,200,83,.06);border:1px solid rgba(0,200,83,.2);border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--muted)">
+        📝 Drop in a few raw notes and ACY2Book's local analyst will rewrite it in Vegas voice.
+      </div>
+      <div id="admin-notes"></div>
       <div class="section-label" style="margin-top:8px">Book Stats <div style="flex:1;height:1px;background:var(--border)"></div></div>
       <div class="stat-grid" id="admin-stats"></div>
       <div class="section-label" style="margin-top:8px">Danger Zone <div style="flex:1;height:1px;background:var(--border)"></div></div>
@@ -338,7 +340,6 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
 <div class="toast-wrap" id="toastWrap"></div>
 
 <script type="module">
-// ─── FIREBASE ─────────────────────────────────────────────────────────────────
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
@@ -353,26 +354,24 @@ const firebaseApp = initializeApp({
 });
 const db = getDatabase(firebaseApp);
 
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
 const ADMIN_CODE   = "ACY2ADMIN";
 const STARTING_BAL = 10000;
 const LS_KEY       = "acy2book:identity";
 
-// ─── PLAYERS ─────────────────────────────────────────────────────────────────
 const PLAYERS = [
-  {id:"nick",    name:"Nick Digiorno", initials:"ND", odds:null,  type:"neg", section:"confirmed", status:"departed", display:"✓ OUT",      dotClass:"dot-gone", cardClass:"confirmed", analysis:"Most anonymous player on the board officially confirmed out. Nobody noticed. One AA asked 'wait where's Nick?' approximately 3 weeks post-departure.", props:[]},
-  {id:"david",   name:"David",         initials:"DA", odds:null,  type:"neg", section:"confirmed", status:"departed", display:"PLEASE GOD", dotClass:"dot-gone", cardClass:"confirmed", analysis:"The line that broke oddsmakers. Offer letter confirmed. Last day: June 28. Largest consensus win in ACY2Book history. All tickets graded WIN.", props:[]},
-  {id:"matts",   name:"Matt S",        initials:"MS", odds:null,  type:"neg", section:"confirmed", status:"departed", display:"+180",        dotClass:"dot-gone", cardClass:"confirmed", analysis:"The value play of the season. Opened at +180. Offer letter confirmed. Last day June 28. Nobody knows who locked those bins. Nobody ever will.", props:[{label:"Who locked the bins: Matt S",odds:"-350",type:"neg"},{label:"Anyone ever figures it out",odds:"+2200",type:"pos"}]},
-  {id:"randy",   name:"Randolph Files",initials:"RF", odds:-2500, type:"neg", section:"favorites", status:"active",   display:"-2500 🔒",   dotClass:"dot-hot",  cardClass:"lock",      analysis:"Guy has 'Files' next to his name. The script writers decided this before the season started. HR has reportedly pre-printed the paperwork.", props:[]},
-  {id:"cass",    name:"Cass",          initials:"CA", odds:-1200, type:"neg", section:"favorites", status:"active",   display:"-1200",       dotClass:"dot-hot",  cardClass:"",          analysis:"The 3P Meta is no longer a theory. It's a lifestyle. Sharp money has flooded in after multiple 'what if I just disappear' indicators.", props:[{label:"Pregnancy",odds:"+900",type:"pos"},{label:"Moving in with Colin",odds:"+1400",type:"pos"},{label:"Becoming a cryptid in OB",odds:"+250",type:"pos"}]},
-  {id:"savanna", name:"Savanna",       initials:"SA", odds:-900,  type:"neg", section:"favorites", status:"active",   display:"-900",        dotClass:"dot-hot",  cardClass:"",          analysis:"TEB6 reject. Future ACY2 reject. Generational leave candidate. Elite at donating PTO. Expected departure: immediately after saying 'wait what' one final time.", props:[]},
-  {id:"syd",     name:"Syd",           initials:"SY", odds:-420,  type:"neg", section:"favorites", status:"active",   display:"-420",        dotClass:"dot-hot",  cardClass:"syd",       analysis:"🚨 LINE ALERT: Opened at -450. Brian discount applied — sitting at -420. Informational interview THIS TUESDAY with a Brian. Brians historically 0 for 4 in converting informals. Size down 15% for Brian interference.", props:[{label:"Informational converts (Brian discount applied)",odds:"-110",type:"neg"},{label:"Brian completely wastes her time",odds:"+140",type:"pos"},{label:"Gone before peak season",odds:"-115",type:"neg"},{label:"\"I'm too smart for this\" era begins",odds:"-220",type:"neg"},{label:"Stays another full year",odds:"+450",type:"pos"}]},
-  {id:"rich",    name:"Rich",          initials:"RI", odds:-700,  type:"neg", section:"favorites", status:"active",   display:"-700",        dotClass:"dot-warm", cardClass:"",          analysis:"Longest-tenured Bulk Floor PA in USNS history only to get power-crept by steel racking. Leaves honorably or gets dragged out from the smokers cage.", props:[{label:"Honorable departure",odds:"+140",type:"pos"},{label:"Dragged from smokers cage",odds:"+200",type:"pos"}]},
-  {id:"kurt",    name:"Kurt",          initials:"KU", odds:325,   type:"pos", section:"value",     status:"active",   display:"+325",        dotClass:"dot-warm", cardClass:"",          analysis:"3P Meta whispers grow louder. World Cup interference is a real variable. OB is running dangerously low on glue sticks. If Kurt goes, civilization may follow.", props:[{label:"World Cup-triggered departure",odds:"+550",type:"pos"},{label:"OB loses its final glue stick",odds:"+300",type:"pos"}]},
-  {id:"hetvi",   name:"Hetvi",         initials:"HE", odds:600,   type:"pos", section:"value",     status:"active",   display:"+600",        dotClass:"dot-warm", cardClass:"",          analysis:"Free agency rumors at TEB3 continue to circulate. Insiders cite 'vibes' as the primary reason.", props:[{label:"L6 by October 2027",odds:"+450",type:"pos"},{label:"Knowledge gap continuation",odds:"-130",type:"neg"}]},
-  {id:"colin",   name:"Colin",         initials:"CO", odds:750,   type:"pos", section:"value",     status:"active",   display:"+750",        dotClass:"dot-cold", cardClass:"",          analysis:"Would genuinely hurt the roster. Markets reacted negatively after 'police officer' comments. Veteran glue guy. Quietly one of the few keeping civilization intact.", props:[]},
-  {id:"sebastian",name:"Sebastian",   initials:"??", odds:500,   type:"pos", section:"value",     status:"active",   display:"+500",        dotClass:"dot-cold", cardClass:"",          analysis:"Oddsmakers attempted to clarify which Sebastian this referred to and unanimously agreed it does not matter. The line applies to all Sebastians.", props:[]},
-  {id:"kate",    name:"Kate",          initials:"🦉", odds:1000,  type:"pos", section:"mystery",   status:"active",   display:"🦉 +1000?",  dotClass:"dot-cold", cardClass:"",          analysis:"No one understands the line. No one understands the owl. The owl sees all. The question mark is load-bearing. Do not remove it.", props:[]},
+  {id:"nick", name:"Nick Digiorno", initials:"ND", odds:null, type:"neg", section:"confirmed", status:"departed", display:"✓ OUT", dotClass:"dot-gone", cardClass:"confirmed", analysis:"Most anonymous player on the board officially confirmed out. Nobody noticed. One AA asked 'wait where's Nick?' approximately 3 weeks post-departure.", props:[]},
+  {id:"david", name:"David", initials:"DA", odds:null, type:"neg", section:"confirmed", status:"departed", display:"PLEASE GOD", dotClass:"dot-gone", cardClass:"confirmed", analysis:"The line that broke oddsmakers. Offer letter confirmed. Last day: June 28. Largest consensus win in ACY2Book history. All tickets graded WIN.", props:[]},
+  {id:"matts", name:"Matt S", initials:"MS", odds:null, type:"neg", section:"confirmed", status:"departed", display:"+180", dotClass:"dot-gone", cardClass:"confirmed", analysis:"The value play of the season. Opened at +180. Offer letter confirmed. Last day June 28. Nobody knows who locked those bins. Nobody ever will.", props:[{label:"Who locked the bins: Matt S",odds:"-350",type:"neg"},{label:"Anyone ever figures it out",odds:"+2200",type:"pos"}]},
+  {id:"randy", name:"Randolph Files", initials:"RF", odds:-2500, type:"neg", section:"favorites", status:"active", display:"-2500 🔒", dotClass:"dot-hot", cardClass:"lock", analysis:"Guy has 'Files' next to his name. The script writers decided this before the season started. HR has reportedly pre-printed the paperwork.", props:[]},
+  {id:"cass", name:"Cass", initials:"CA", odds:-1200, type:"neg", section:"favorites", status:"active", display:"-1200", dotClass:"dot-hot", cardClass:"", analysis:"The 3P Meta is no longer a theory. It's a lifestyle. Sharp money has flooded in after multiple 'what if I just disappear' indicators.", props:[{label:"Pregnancy",odds:"+900",type:"pos"},{label:"Moving in with Colin",odds:"+1400",type:"pos"},{label:"Becoming a cryptid in OB",odds:"+250",type:"pos"}]},
+  {id:"savanna", name:"Savanna", initials:"SA", odds:-900, type:"neg", section:"favorites", status:"active", display:"-900", dotClass:"dot-hot", cardClass:"", analysis:"TEB6 reject. Future ACY2 reject. Generational leave candidate. Elite at donating PTO. Expected departure: immediately after saying 'wait what' one final time.", props:[]},
+  {id:"syd", name:"Syd", initials:"SY", odds:-420, type:"neg", section:"favorites", status:"active", display:"-420", dotClass:"dot-hot", cardClass:"syd", analysis:"🚨 LINE ALERT: Opened at -450. Brian discount applied — sitting at -420. Informational interview THIS TUESDAY with a Brian. Brians historically 0 for 4 in converting informals. Size down 15% for Brian interference.", props:[{label:"Informational converts (Brian discount applied)",odds:"-110",type:"neg"},{label:"Brian completely wastes her time",odds:"+140",type:"pos"},{label:"Gone before peak season",odds:"-115",type:"neg"},{label:"\"I'm too smart for this\" era begins",odds:"-220",type:"neg"},{label:"Stays another full year",odds:"+450",type:"pos"}]},
+  {id:"rich", name:"Rich", initials:"RI", odds:-700, type:"neg", section:"favorites", status:"active", display:"-700", dotClass:"dot-warm", cardClass:"", analysis:"Longest-tenured Bulk Floor PA in USNS history only to get power-crept by steel racking. Leaves honorably or gets dragged out from the smokers cage.", props:[{label:"Honorable departure",odds:"+140",type:"pos"},{label:"Dragged from smokers cage",odds:"+200",type:"pos"}]},
+  {id:"kurt", name:"Kurt", initials:"KU", odds:325, type:"pos", section:"value", status:"active", display:"+325", dotClass:"dot-warm", cardClass:"", analysis:"3P Meta whispers grow louder. World Cup interference is a real variable. OB is running dangerously low on glue sticks. If Kurt goes, civilization may follow.", props:[{label:"World Cup-triggered departure",odds:"+550",type:"pos"},{label:"OB loses its final glue stick",odds:"+300",type:"pos"}]},
+  {id:"hetvi", name:"Hetvi", initials:"HE", odds:600, type:"pos", section:"value", status:"active", display:"+600", dotClass:"dot-warm", cardClass:"", analysis:"Free agency rumors at TEB3 continue to circulate. Insiders cite 'vibes' as the primary reason.", props:[{label:"L6 by October 2027",odds:"+450",type:"pos"},{label:"Knowledge gap continuation",odds:"-130",type:"neg"}]},
+  {id:"colin", name:"Colin", initials:"CO", odds:750, type:"pos", section:"value", status:"active", display:"+750", dotClass:"dot-cold", cardClass:"", analysis:"Would genuinely hurt the roster. Markets reacted negatively after 'police officer' comments. Veteran glue guy. Quietly one of the few keeping civilization intact.", props:[]},
+  {id:"sebastian", name:"Sebastian", initials:"??", odds:500, type:"pos", section:"value", status:"active", display:"+500", dotClass:"dot-cold", cardClass:"", analysis:"Oddsmakers attempted to clarify which Sebastian this referred to and unanimously agreed it does not matter. The line applies to all Sebastians.", props:[]},
+  {id:"kate", name:"Kate", initials:"🦉", odds:1000, type:"pos", section:"mystery", status:"active", display:"🦉 +1000?", dotClass:"dot-cold", cardClass:"", analysis:"No one understands the line. No one understands the owl. The owl sees all. The question mark is load-bearing. Do not remove it.", props:[]}
 ];
 
 const DRIFT_RAILS = {
@@ -381,15 +380,14 @@ const DRIFT_RAILS = {
   colin:[550,950], sebastian:[350,650], kate:[800,1200]
 };
 
-// ─── STATE ────────────────────────────────────────────────────────────────────
 let currentUser = null;
 let state = {users:{}, bets:{}, players:{}};
 let slip = [];
 let players = JSON.parse(JSON.stringify(PLAYERS));
 let prevOdds = {};
 let driftTimer = null;
+let listenerStarted = false;
 
-// ─── FIREBASE HELPERS ─────────────────────────────────────────────────────────
 async function fbGet(path) {
   const snap = await get(ref(db, path));
   return snap.exists() ? snap.val() : null;
@@ -397,21 +395,19 @@ async function fbGet(path) {
 async function fbSet(path, val) { await set(ref(db, path), val); }
 async function fbUpdate(path, val) { await update(ref(db, path), val); }
 
-// ─── LOCAL STORAGE ────────────────────────────────────────────────────────────
 function lsGet() { try { return JSON.parse(localStorage.getItem(LS_KEY)); } catch { return null; } }
 function lsSet(v) { try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch {} }
 function lsClear() { try { localStorage.removeItem(LS_KEY); } catch {} }
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
 function calcPayout(amount, oddsStr) {
-  const o = parseInt(String(oddsStr).replace("+",""));
+  const o = parseInt(String(oddsStr).replace("+","").replace(/[^\d-]/g, ""));
   if (isNaN(o)||o===0) return amount;
   if (o>0) return +(amount*(o/100)+amount).toFixed(2);
   return +(amount*(100/Math.abs(o))+amount).toFixed(2);
 }
 function calcProfit(amount, odds) { return +(calcPayout(amount,odds)-amount).toFixed(2); }
 function fmtMoney(n) {
-  const abs=Math.abs(n);
+  const abs=Math.abs(Number(n) || 0);
   const s=abs>=1000?`$${(abs/1000).toFixed(1)}k`:`$${abs.toFixed(2)}`;
   return n<0?`-${s}`:s;
 }
@@ -427,15 +423,25 @@ function getMyBalance() {
   return u ? u.balance : STARTING_BAL;
 }
 function toast(msg, red=false) {
+  const wrap = document.getElementById("toastWrap");
+  if (!wrap) return;
   const el=document.createElement("div");
   el.className="toast"+(red?" red":"");
   el.textContent=msg;
-  document.getElementById("toastWrap").appendChild(el);
+  wrap.appendChild(el);
   setTimeout(()=>el.remove(),3200);
 }
+function escapeAttr(s) {
+  return String(s ?? "").replace(/&/g,"&amp;").replace(/'/g,"&#39;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function escapeHtml(s) {
+  return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
 
-// ─── REALTIME LISTENER ────────────────────────────────────────────────────────
 function startListener() {
+  if (listenerStarted) return;
+  listenerStarted = true;
+
   onValue(ref(db,"/"), snap => {
     const val = snap.val() || {};
     state.users = val.users || {};
@@ -443,7 +449,7 @@ function startListener() {
     state.players = val.players || {};
     applyStoredPlayers();
     renderHero();
-    // update odds on board
+
     players.forEach(p => {
       const el = document.getElementById(`onum-${p.id}`);
       if (!el) return;
@@ -458,15 +464,16 @@ function startListener() {
       }
       prevOdds[p.id] = p.odds;
       if (p.status !== "departed") el.textContent = p.display;
+      const analysisEl = document.getElementById(`analysis-${p.id}`);
+      if (analysisEl) analysisEl.textContent = p.analysis;
     });
-    // refresh active tab
-    if (document.getElementById("tab-leaderboard-content").classList.contains("active")) renderLeaderboard();
-    if (document.getElementById("tab-mybets-content").classList.contains("active")) renderMyBets();
-    if (document.getElementById("tab-admin-content").classList.contains("active")) renderAdmin();
+
+    if (document.getElementById("tab-leaderboard-content")?.classList.contains("active")) renderLeaderboard();
+    if (document.getElementById("tab-mybets-content")?.classList.contains("active")) renderMyBets();
+    if (document.getElementById("tab-admin-content")?.classList.contains("active")) renderAdmin();
   });
 }
 
-// ─── APPLY STORED PLAYERS ─────────────────────────────────────────────────────
 function applyStoredPlayers() {
   players = JSON.parse(JSON.stringify(PLAYERS));
   Object.values(state.players || {}).forEach(sp => {
@@ -476,14 +483,18 @@ function applyStoredPlayers() {
     if (sp.odds !== undefined) p.odds = sp.odds;
     if (sp.display) p.display = sp.display;
     if (sp.type) p.type = sp.type;
+    if (sp.analysis) p.analysis = sp.analysis;
   });
 }
 
-// ─── LOGIN ────────────────────────────────────────────────────────────────────
 window.doLogin = async function() {
   const name = document.getElementById("loginName").value.trim();
   const code = document.getElementById("loginAdmin").value.trim().toUpperCase();
-  if (!name) return;
+  if (!name) {
+    toast("Enter a name first", true);
+    return;
+  }
+
   const isAdmin = code === ADMIN_CODE;
   currentUser = {name, isAdmin};
   lsSet({name, isAdmin});
@@ -496,7 +507,7 @@ window.doLogin = async function() {
     toast(`Welcome back, ${name}! Balance: ${fmtMoney(existing.balance)}`);
   }
   showApp();
-}
+};
 
 window.doLogout = function() {
   lsClear();
@@ -508,14 +519,13 @@ window.doLogout = function() {
   document.getElementById("loginScreen").style.display = "flex";
   document.getElementById("app").style.display = "none";
   document.getElementById("slipFloat").style.display = "none";
-}
+};
 
-// ─── SHOW APP ────────────────────────────────────────────────────────────────
 function showApp() {
   document.getElementById("loginScreen").style.display = "none";
   document.getElementById("app").style.display = "block";
   document.getElementById("slipFloat").style.display = "flex";
-  if (currentUser?.isAdmin) document.getElementById("tab-admin").style.display = "inline-block";
+  document.getElementById("tab-admin").style.display = currentUser?.isAdmin ? "inline-block" : "none";
   applyStoredPlayers();
   renderBoard();
   renderHero();
@@ -524,7 +534,6 @@ function showApp() {
   showInstallPrompt();
 }
 
-// ─── BOARD ────────────────────────────────────────────────────────────────────
 const SECTION_MAP = {confirmed:"list-confirmed",favorites:"list-favorites",value:"list-value",mystery:"list-mystery"};
 
 function renderBoard() {
@@ -554,30 +563,34 @@ function buildCard(p) {
 
   let propsHtml="";
   if(p.props?.length) {
-    propsHtml=p.props.map(pr=>`<div class="prop-row" onclick="addToSlip('${p.name}','${pr.label.replace(/'/g,"\\'")}','${pr.odds}','${pr.type}','${p.id}')"><span class="prop-label">${pr.label}</span><span class="prop-odds ${pr.type}">${pr.odds}</span></div>`).join("");
+    propsHtml=p.props.map(pr=>`
+      <div class="prop-row" onclick="addToSlip('${escapeAttr(p.name)}','${escapeAttr(pr.label)}','${escapeAttr(pr.odds)}','${escapeAttr(pr.type)}','${escapeAttr(p.id)}')">
+        <span class="prop-label">${escapeHtml(pr.label)}</span>
+        <span class="prop-odds ${escapeAttr(pr.type)}">${escapeHtml(pr.odds)}</span>
+      </div>`).join("");
   }
 
   const clickAction = isDead
-    ? `event.stopPropagation();toast('Market closed — ${p.name} is out.')`
+    ? `event.stopPropagation();toast('Market closed — ${escapeAttr(p.name)} is out.')`
     : isSyd
     ? `event.stopPropagation();addToSlipSyd()`
-    : `event.stopPropagation();addToSlip('${p.name}','To Depart','${p.display}','${p.type}','${p.id}')`;
+    : `event.stopPropagation();addToSlip('${escapeAttr(p.name)}','To Depart','${escapeAttr(p.display)}','${escapeAttr(p.type)}','${escapeAttr(p.id)}')`;
 
   div.innerHTML=`
-    <div class="card-main" onclick="toggleCard('${p.id}')">
-      <div class="avatar">${p.initials}<div class="status-dot ${p.dotClass}"></div></div>
+    <div class="card-main" onclick="toggleCard('${escapeAttr(p.id)}')">
+      <div class="avatar">${escapeHtml(p.initials)}<div class="status-dot ${escapeAttr(p.dotClass)}"></div></div>
       <div class="player-info">
-        <div class="player-name">${p.name}${isLock?" 🔒":""}${isSyd?" ⭐":""}</div>
+        <div class="player-name">${escapeHtml(p.name)}${isLock?" 🔒":""}${isSyd?" ⭐":""}</div>
         <div class="player-tags">${tagsHtml}</div>
       </div>
-      <div class="odds-btn ${btnClass}" id="obtn-${p.id}" onclick="${clickAction}">
+      <div class="odds-btn ${btnClass}" id="obtn-${escapeAttr(p.id)}" onclick="${clickAction}">
         <div class="odds-label">${isDead?"RESULT":"To Depart"}</div>
-        <div class="odds-num" id="onum-${p.id}" ${oddsNumStyle}>${p.display}</div>
+        <div class="odds-num" id="onum-${escapeAttr(p.id)}" ${oddsNumStyle}>${escapeHtml(p.display)}</div>
       </div>
     </div>
-    <button class="expand-toggle" onclick="toggleCard('${p.id}')">${isSyd?"▾ Full Analysis":"▾ Analysis"}</button>
+    <button class="expand-toggle" onclick="toggleCard('${escapeAttr(p.id)}')">${isSyd?"▾ Full Analysis":"▾ Analysis"}</button>
     <div class="card-expand">
-      <div class="analysis-text">${p.analysis}</div>
+      <div class="analysis-text" id="analysis-${escapeAttr(p.id)}">${escapeHtml(p.analysis)}</div>
       ${propsHtml?`<div>${propsHtml}</div>`:""}
     </div>`;
   return div;
@@ -589,9 +602,8 @@ window.toggleCard = function(id) {
   card.classList.toggle("open");
   const btn=card.querySelector(".expand-toggle");
   btn.textContent=card.classList.contains("open")?"▴ Hide":(id==="syd"?"▾ Full Analysis":"▾ Analysis");
-}
+};
 
-// ─── HERO ────────────────────────────────────────────────────────────────────
 function renderHero() {
   if(!currentUser) return;
   const myBets=Object.values(state.bets||{}).filter(b=>b.userName===currentUser.name);
@@ -601,7 +613,6 @@ function renderHero() {
   document.getElementById("drawerBal").textContent=fmtMoney(getMyBalance());
 }
 
-// ─── TABS ────────────────────────────────────────────────────────────────────
 window.setTab = function(name) {
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
   document.querySelectorAll(".npill:not(.ghost)").forEach(p=>p.classList.remove("active"));
@@ -610,9 +621,8 @@ window.setTab = function(name) {
   if(name==="leaderboard") renderLeaderboard();
   if(name==="mybets") renderMyBets();
   if(name==="admin") renderAdmin();
-}
+};
 
-// ─── LEADERBOARD ─────────────────────────────────────────────────────────────
 function renderLeaderboard() {
   const medals=["🥇","🥈","🥉"];
   const users=Object.values(state.users||{});
@@ -624,7 +634,7 @@ function renderLeaderboard() {
     const ub=bets.filter(b=>b.userName===u.name);
     return `<div class="lb-row ${i===0?"gold":""}">
       <div class="lb-rank" style="color:${i===0?"#f5a623":i===1?"#aaaacc":i===2?"#cd7f32":"var(--muted)"}">${medals[i]||i+1}</div>
-      <div><div class="lb-name">${u.name}</div><div style="font-size:11px;color:var(--muted)">${ub.length} bet${ub.length!==1?"s":""}</div></div>
+      <div><div class="lb-name">${escapeHtml(u.name)}</div><div style="font-size:11px;color:var(--muted)">${ub.length} bet${ub.length!==1?"s":""}</div></div>
       <div style="text-align:right">
         <div class="lb-bal" style="color:${u.balance>=STARTING_BAL?"var(--green)":"var(--red)"}">${fmtMoney(u.balance)}</div>
         <div class="lb-change" style="color:${change>=0?"var(--green)":"var(--red)"}">${change>=0?"+":""}${fmtMoney(change)}</div>
@@ -636,8 +646,8 @@ function renderLeaderboard() {
   document.getElementById("lb-bets").innerHTML=recent.length?recent.map(b=>`
     <div class="bet-row">
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div><strong>${b.userName}</strong> <span style="color:var(--muted);font-size:12px">bet on</span> <strong>${b.name}</strong> <span style="color:var(--muted);font-size:11px">— ${b.market}</span></div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;color:${b.type==="neg"?"var(--red)":"var(--green)"}">${b.odds}</div>
+        <div><strong>${escapeHtml(b.userName)}</strong> <span style="color:var(--muted);font-size:12px">bet on</span> <strong>${escapeHtml(b.name)}</strong> <span style="color:var(--muted);font-size:11px">— ${escapeHtml(b.market)}</span></div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;color:${b.type==="neg"?"var(--red)":"var(--green)"}">${escapeHtml(b.odds)}</div>
       </div>
       <div style="display:flex;justify-content:space-between;margin-top:4px">
         <div style="font-size:12px;color:var(--muted)">Wagered: <span style="color:var(--text)">${fmtMoney(b.amount)}</span>
@@ -650,7 +660,6 @@ function renderLeaderboard() {
     </div>`).join(""):`<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No bets placed yet.</div>`;
 }
 
-// ─── MY BETS ─────────────────────────────────────────────────────────────────
 function renderMyBets() {
   const myBets=[...Object.values(state.bets||{}).filter(b=>b.userName===currentUser?.name)].sort((a,b)=>b.timestamp-a.timestamp);
   const bal=getMyBalance();
@@ -659,8 +668,8 @@ function renderMyBets() {
   document.getElementById("mybets-list").innerHTML=myBets.length?myBets.map(b=>`
     <div class="slip-item">
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div><div class="slip-name">${b.name}</div><div class="slip-market">${b.market}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">${timeAgo(b.timestamp)}</div></div>
-        <div style="text-align:right"><div class="slip-odds-val ${b.type}">${b.odds}</div>
+        <div><div class="slip-name">${escapeHtml(b.name)}</div><div class="slip-market">${escapeHtml(b.market)}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">${timeAgo(b.timestamp)}</div></div>
+        <div style="text-align:right"><div class="slip-odds-val ${escapeAttr(b.type)}">${escapeHtml(b.odds)}</div>
           <div style="font-size:11px;margin-top:2px;color:${b.status==="won"?"var(--green)":b.status==="lost"?"var(--red)":"var(--gold)"}">
             ${b.status==="won"?"✓ WON":b.status==="lost"?"✗ LOST":"⏳ Open"}
           </div>
@@ -675,7 +684,6 @@ function renderMyBets() {
     </div>`).join(""):`<div style="text-align:center;padding:40px 20px;color:var(--muted);font-size:14px">No bets yet. Head to the board and pick your spots.</div>`;
 }
 
-// ─── ADMIN ────────────────────────────────────────────────────────────────────
 function renderAdmin() {
   const active=players.filter(p=>p.status==="active");
   const allBets=Object.values(state.bets||{});
@@ -685,21 +693,29 @@ function renderAdmin() {
     const stake=openBets.reduce((s,b)=>s+b.amount,0);
     return `<div class="admin-card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px">${p.name}</div>
+        <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px">${escapeHtml(p.name)}</div>
         <div style="font-size:11px;color:var(--muted)">${openBets.length} open bets · ${fmtMoney(stake)} at stake</div></div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;color:${p.type==="neg"?"var(--red)":"var(--green)"}">${p.display}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;color:${p.type==="neg"?"var(--red)":"var(--green)"}">${escapeHtml(p.display)}</div>
       </div>
-      <button class="admin-btn red" onclick="gradePlayer('${p.id}')">✓ Mark Departed — Pay Out Bets</button>
+      <button class="admin-btn red" onclick="gradePlayer('${escapeAttr(p.id)}')">✓ Mark Departed — Pay Out Bets</button>
     </div>`;
   }).join("");
 
   document.getElementById("admin-lines").innerHTML=active.map(p=>`
     <div class="admin-card">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;margin-bottom:8px">${p.name} <span style="color:var(--muted);font-weight:400;font-size:13px">current: ${p.display}</span></div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;margin-bottom:8px">${escapeHtml(p.name)} <span style="color:var(--muted);font-weight:400;font-size:13px">current: ${escapeHtml(p.display)}</span></div>
       <div style="display:flex;gap:8px">
-        <input class="text-input" style="flex:1;margin-bottom:0" id="newodds-${p.id}" placeholder="e.g. -550 or +300">
-        <button class="admin-btn gold" onclick="adminUpdateOdds('${p.id}')">Update</button>
+        <input class="text-input" style="flex:1;margin-bottom:0" id="newodds-${escapeAttr(p.id)}" placeholder="e.g. -550 or +300">
+        <button class="admin-btn gold" onclick="adminUpdateOdds('${escapeAttr(p.id)}')">Update</button>
       </div>
+    </div>`).join("");
+
+  document.getElementById("admin-notes").innerHTML=active.map(p=>`
+    <div class="admin-card">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;margin-bottom:4px">${escapeHtml(p.name)}</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Current: ${escapeHtml(p.analysis.substring(0,80))}...</div>
+      <textarea class="text-input" id="notes-${escapeAttr(p.id)}" rows="3" placeholder="e.g. Had informational with Brian, Brian talked about himself the whole time, line dropping" style="resize:none;margin-bottom:6px"></textarea>
+      <button class="admin-btn gold" id="notesbtn-${escapeAttr(p.id)}" onclick="adminUpdateAnalysis('${escapeAttr(p.id)}')">✨ Generate & Publish</button>
     </div>`).join("");
 
   const totalWagered=allBets.reduce((s,b)=>s+b.amount,0);
@@ -731,10 +747,10 @@ window.gradePlayer = async function(playerId) {
     if(u) updates[`/users/${name}/balance`]=u.balance+payout;
   });
 
-  updates[`/players/${playerId}`]={id:playerId,status:"departed",odds:p.odds,display:p.display,type:p.type};
+  updates[`/players/${playerId}`]={id:playerId,status:"departed",odds:p.odds,display:p.display,type:p.type,analysis:p.analysis};
   await fbUpdate("/", updates);
   toast(`✓ ${p.name} marked departed. ${Object.keys(winnerMap).length} winner${Object.keys(winnerMap).length!==1?"s":""} paid out!`);
-}
+};
 
 window.adminUpdateOdds = async function(playerId) {
   const input=document.getElementById(`newodds-${playerId}`);
@@ -743,40 +759,85 @@ window.adminUpdateOdds = async function(playerId) {
   const p=players.find(x=>x.id===playerId);
   if(!p) return;
   const display=o>0?`+${o}`:`${o}`;
-  await fbSet(`/players/${playerId}`,{id:playerId,status:p.status,odds:o,display,type:o<0?"neg":"pos"});
+  await fbSet(`/players/${playerId}`,{id:playerId,status:p.status,odds:o,display,type:o<0?"neg":"pos",analysis:p.analysis});
   input.value="";
   toast(`Line updated: ${p.name} → ${display}`);
+};
+
+function makeVegasAnalysis(name, display, notes) {
+  const clean = notes.replace(/\s+/g, " ").trim();
+  const openers = [
+    "Oddsmakers have officially moved this one out of the rumor mill and onto the big board.",
+    "Sharp money is circling this ticket like it found a loose scanner battery at startup.",
+    "The book has seen enough — this line is no longer vibes-only.",
+    "Market confidence is climbing fast, and the tape is getting harder to ignore."
+  ];
+  const closer = [
+    "Until further notice, this remains a sweat-heavy position with serious drama baked into the price.",
+    "Size carefully, but the room is whispering and the board is listening.",
+    "This is exactly the kind of chaos ACY2Book was built to misprice.",
+    "Public money may laugh, but the insiders are not exactly rushing to fade it."
+  ];
+  const idx = Math.abs([...name].reduce((s,c)=>s+c.charCodeAt(0),0)) % openers.length;
+  return `${openers[idx]} ${name} sits at ${display}, and the latest read is simple: ${clean}. ${closer[idx]}`;
 }
+
+window.adminUpdateAnalysis = async function(playerId) {
+  const textarea = document.getElementById(`notes-${playerId}`);
+  const btn = document.getElementById(`notesbtn-${playerId}`);
+  const notes = textarea.value.trim();
+  if (!notes) { toast("Enter some notes first", true); return; }
+
+  const p = players.find(x=>x.id===playerId);
+  if (!p) return;
+
+  btn.textContent = "⏳ Generating...";
+  btn.disabled = true;
+
+  try {
+    const newAnalysis = makeVegasAnalysis(p.name, p.display, notes);
+    const sp = state.players[playerId] || {id:playerId, status:p.status, odds:p.odds, display:p.display, type:p.type};
+    await fbSet(`/players/${playerId}`, {...sp, analysis: newAnalysis});
+
+    textarea.value = "";
+    toast(`✓ ${p.name}'s analysis updated`);
+  } catch(e) {
+    toast("Generation failed — try again", true);
+    console.error(e);
+  } finally {
+    btn.textContent = "✨ Generate & Publish";
+    btn.disabled = false;
+  }
+};
 
 window.confirmReset = function() {
   if(!confirm("Reset ALL data? Wipes every bet and balance. Cannot be undone.")) return;
   if(!confirm("Are you absolutely sure?")) return;
   doReset();
-}
+};
 
 async function doReset() {
   await fbSet("/",{users:{},bets:{},players:{}});
   toast("✓ All data reset. Fresh start.");
 }
 
-// ─── BET SLIP ────────────────────────────────────────────────────────────────
 window.addToSlip = function(name, market, odds, type, playerId) {
   if(slip.find(b=>b.name===name&&b.market===market)){toast(`Already in slip: ${name}`,true);return;}
   slip.push({name,market,odds,type,amount:10,playerId});
   updateSlipUI();
   openDrawer();
   toast(`Added: ${name} ${odds}`);
-}
+};
 
 window.addToSlipSyd = function() {
   const live=document.getElementById("onum-syd")?.textContent||"-420";
   window.addToSlip("Syd","To Depart",live,"neg","syd");
-}
+};
 
-window.removeFromSlip = function(i){slip.splice(i,1);updateSlipUI();}
-window.updateAmt = function(i,val){slip[i].amount=Math.max(1,parseFloat(val)||1);updateSlipUI(true);}
-window.setAmt = function(i,val){slip[i].amount=val;updateSlipUI();}
-window.clearSlip = function(){slip=[];updateSlipUI();}
+window.removeFromSlip = function(i){slip.splice(i,1);updateSlipUI();};
+window.updateAmt = function(i,val){slip[i].amount=Math.max(1,parseFloat(val)||1);updateSlipUI(true);};
+window.setAmt = function(i,val){slip[i].amount=val;updateSlipUI();};
+window.clearSlip = function(){slip=[];updateSlipUI();};
 
 function updateSlipUI(partial=false) {
   const count=slip.length;
@@ -797,8 +858,8 @@ function updateSlipUI(partial=false) {
       <div class="slip-item">
         <button class="slip-remove" onclick="removeFromSlip(${i})">×</button>
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
-          <div><div class="slip-name">${b.name}</div><div class="slip-market">${b.market}</div></div>
-          <div class="slip-odds-val ${b.type}">${b.odds}</div>
+          <div><div class="slip-name">${escapeHtml(b.name)}</div><div class="slip-market">${escapeHtml(b.market)}</div></div>
+          <div class="slip-odds-val ${escapeAttr(b.type)}">${escapeHtml(b.odds)}</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
           <span style="font-size:11px;color:var(--muted);white-space:nowrap">Wager $</span>
@@ -853,21 +914,19 @@ window.placeBets = async function() {
   document.getElementById("modalTitle").textContent="Bets Placed! 🎉";
   document.getElementById("modalText").textContent=`${count} bet${count>1?"s":""} placed. ${fmtMoney(total)} wagered. New balance: ${fmtMoney(bal-total)}`;
   document.getElementById("modal").classList.add("open");
-}
+};
 
-// ─── DRAWER ───────────────────────────────────────────────────────────────────
 window.openDrawer = function(){
   document.getElementById("overlay").classList.add("open");
   document.getElementById("drawer").classList.add("open");
   updateSlipUI();
-}
+};
 window.closeDrawer = function(){
   document.getElementById("overlay").classList.remove("open");
   document.getElementById("drawer").classList.remove("open");
-}
-window.closeModal = function(){document.getElementById("modal").classList.remove("open");}
+};
+window.closeModal = function(){document.getElementById("modal").classList.remove("open");};
 
-// ─── ODDS DRIFT ──────────────────────────────────────────────────────────────
 function startDrift() {
   if(driftTimer) clearInterval(driftTimer);
   driftTimer=setInterval(async()=>{
@@ -890,13 +949,12 @@ function startDrift() {
       if(next===p.odds) return;
       changed=true;
       const display=p.id==="kate"?`🦉 +${next}?`:next>0?`+${next}`:`${next}`;
-      updates[`/players/${p.id}`]={id:p.id,status:p.status,odds:next,display,type:next<0?"neg":"pos"};
+      updates[`/players/${p.id}`]={id:p.id,status:p.status,odds:next,display,type:next<0?"neg":"pos",analysis:p.analysis};
     });
     if(changed) await fbUpdate("/",updates);
   },30000);
 }
 
-// ─── PWA ─────────────────────────────────────────────────────────────────────
 let deferredPrompt=null;
 window.addEventListener("beforeinstallprompt",e=>{
   e.preventDefault();
@@ -918,17 +976,16 @@ function showInstallPrompt() {
 window.installApp = async function() {
   if(!deferredPrompt) return;
   deferredPrompt.prompt();
-  const result=await deferredPrompt.userChoice;
+  await deferredPrompt.userChoice;
   deferredPrompt=null;
   document.getElementById("installBanner").style.display="none";
-}
+};
 
 window.dismissInstall = function() {
   localStorage.setItem("acy2:installDismissed","1");
   document.getElementById("installBanner").style.display="none";
-}
+};
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
 document.getElementById("loginName").addEventListener("keydown",e=>{if(e.key==="Enter") window.doLogin();});
 document.getElementById("loginAdmin").addEventListener("keydown",e=>{if(e.key==="Enter") window.doLogin();});
 
@@ -936,7 +993,6 @@ const identity=lsGet();
 if(identity?.name){
   currentUser=identity;
   showApp();
-  // check if user exists in firebase
   fbGet(`/users/${currentUser.name}`).then(existing=>{
     if(!existing){
       fbSet(`/users/${currentUser.name}`,{name:currentUser.name,balance:STARTING_BAL,joinedAt:Date.now()});
@@ -945,6 +1001,5 @@ if(identity?.name){
   });
 }
 </script>
-
 </body>
 </html>
