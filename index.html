@@ -343,8 +343,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseApp = initializeApp({
-  apiKey: "AIzaSyplaceholder",
-  databaseURL: "https://odds-fc834-default-rtdb.firebaseio.com"
+  apiKey: "AIzaSyARr51obVFeyWt85ZN1Wd8TLIvi7LSGllU",
+  authDomain: "odds-fc834.firebaseapp.com",
+  databaseURL: "https://odds-fc834-default-rtdb.firebaseio.com",
+  projectId: "odds-fc834",
+  storageBucket: "odds-fc834.firebasestorage.app",
+  messagingSenderId: "513274975259",
+  appId: "1:513274975259:web:124047685432ad08ea94be"
 });
 const db = getDatabase(firebaseApp);
 
