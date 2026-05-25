@@ -184,6 +184,56 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
 .install-banner-text strong{color:var(--green);display:block;font-size:13px;margin-bottom:2px;}
 .install-btn{background:var(--green);color:#000;border:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;padding:6px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;}
 .install-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 4px;}
+
+/* GUESS WHO */
+.gw-wrap{display:flex;flex-direction:column;height:calc(100vh - 52px);}
+.gw-top{flex:1;overflow-y:auto;padding-bottom:8px;}
+.gw-hero{background:linear-gradient(180deg,#131320 0%,var(--black) 100%);border-bottom:1px solid var(--border);padding:14px;}
+.gw-hero h2{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;}
+.gw-hero-sub{color:var(--muted);font-size:12px;margin-top:4px;display:flex;gap:12px;flex-wrap:wrap;}
+.gw-controls{padding:10px 14px;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--border);}
+.gw-btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;padding:7px 14px;border-radius:6px;cursor:pointer;text-transform:uppercase;border:none;}
+.gw-btn.green{background:var(--green);color:#000;}
+.gw-btn.ghost{background:var(--pill);border:1px solid var(--border);color:var(--muted);}
+.gw-btn.red{background:rgba(255,59,48,.15);border:1px solid rgba(255,59,48,.4);color:var(--red);}
+.gw-btn.gold{background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.4);color:var(--gold);}
+.upload-zone{border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;margin:10px 14px;cursor:pointer;transition:border-color .2s;}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--green);}
+.upload-zone input{display:none;}
+.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:10px;}
+.photo-card{border-radius:8px;overflow:hidden;aspect-ratio:1;position:relative;cursor:pointer;transition:all .2s;border:2px solid transparent;background:var(--pill);}
+.photo-card.eliminated{opacity:.25;filter:grayscale(1);}
+.photo-card.eliminated::after{content:'✗';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--red);background:rgba(0,0,0,.45);font-weight:900;}
+.photo-card.mystery-reveal{border-color:var(--green);box-shadow:0 0 16px rgba(0,200,83,.5);animation:reveal-pulse 1s infinite;}
+.photo-card.my-secret{border-color:var(--gold);box-shadow:0 0 12px rgba(245,166,35,.45);}
+@keyframes reveal-pulse{0%,100%{box-shadow:0 0 16px rgba(0,200,83,.5)}50%{box-shadow:0 0 28px rgba(0,200,83,.85)}}
+.photo-card img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-name{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.88));color:#fff;font-size:9px;font-weight:700;padding:10px 4px 3px;text-align:center;font-family:'Barlow Condensed',sans-serif;letter-spacing:.3px;}
+.photo-card.empty-card{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;text-align:center;padding:8px;}
+.photo-manage-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.photo-manage-row img{width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0;}
+.photo-manage-row .text-input{margin-bottom:0;padding:6px 10px;font-size:13px;}
+.chat-section{border-top:1px solid var(--border);background:var(--dark);display:flex;flex-direction:column;max-height:50vh;}
+.chat-messages{flex:1;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:6px;min-height:120px;max-height:230px;}
+.chat-msg{display:flex;flex-direction:column;max-width:78%;}
+.chat-msg.mine{align-self:flex-end;align-items:flex-end;}
+.chat-msg.theirs{align-self:flex-start;align-items:flex-start;}
+.chat-msg.system{align-self:center;max-width:94%;}
+.chat-bubble{padding:8px 12px;border-radius:18px;font-size:14px;line-height:1.4;word-break:break-word;}
+.chat-msg.mine .chat-bubble{background:var(--green);color:#000;border-bottom-right-radius:4px;}
+.chat-msg.theirs .chat-bubble{background:#2a2a3d;color:var(--text);border-bottom-left-radius:4px;}
+.chat-bubble.system{background:transparent;color:var(--muted);font-size:11px;text-align:center;padding:2px 8px;}
+.chat-name{font-size:10px;color:var(--muted);margin-bottom:2px;font-weight:600;}
+.chat-time{font-size:10px;color:var(--muted);margin-top:2px;}
+.chat-input-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:1px solid var(--border);}
+.chat-input{flex:1;background:var(--pill);border:1px solid var(--border);color:var(--text);font-size:14px;padding:8px 14px;border-radius:20px;outline:none;}
+.chat-input:focus{border-color:var(--green);}
+.chat-send{background:var(--green);color:#000;border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.guess-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:650;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.guess-modal.open{display:flex;}
+.guess-box{background:var(--dark);border:1px solid var(--gold);border-radius:16px;padding:24px;max-width:340px;width:90%;text-align:center;}
+.gw-select{width:100%;background:var(--pill);border:1px solid var(--border);color:var(--text);font-size:15px;padding:10px 12px;border-radius:8px;outline:none;margin:14px 0;}
+
 </style>
 </head>
 <body>
@@ -305,15 +355,41 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
   </div>
 
   <div class="tab" id="tab-guess-content">
-    <div class="hero">
-      <h1>🎮 GUESS WHO</h1>
-      <div class="hero-sub">Safe placeholder added. The broken smart-quote game code was removed so login works.</div>
-    </div>
-    <div class="pad">
-      <div class="admin-card">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;margin-bottom:6px;color:var(--gold)">Guess Who Mode</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.6">
-          This tab is intentionally clean so it does not break ACY2Book. The betting board, admin panel, line updates, notes generator, bets, and leaderboard are all preserved.
+    <div class="gw-wrap">
+      <div class="gw-top">
+        <div class="gw-hero">
+          <h2>🎮 ACY2 GUESS WHO</h2>
+          <div class="gw-hero-sub">
+            <span id="gw-status">Loading...</span>
+            <span id="gw-board-label">—</span>
+            <span id="gw-mystery-status"></span>
+          </div>
+        </div>
+
+        <div class="gw-controls" id="gw-controls"></div>
+
+        <div id="gw-upload-section" style="display:none">
+          <label class="upload-zone" id="gwUploadZone">
+            <input id="gwPhotoInput" type="file" accept="image/*" multiple>
+            <div style="font-size:30px;margin-bottom:8px">📸</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;color:var(--green);font-size:16px">Upload Guess Who Photos</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">Tap to select images. Rename people below after upload.</div>
+          </label>
+          <div class="pad" style="padding-bottom:12px">
+            <div id="gw-photo-manage"></div>
+          </div>
+        </div>
+
+        <div class="photo-grid" id="gw-board"></div>
+      </div>
+
+      <div class="chat-section">
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-msg system"><div class="chat-bubble system">Open Guess Who to load chat.</div></div>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-input" id="chatInput" placeholder="Ask a yes/no question...">
+          <button class="chat-send" onclick="sendChat()">➤</button>
         </div>
       </div>
     </div>
@@ -633,11 +709,14 @@ function renderHero() {
 window.setTab = function(name) {
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
   document.querySelectorAll(".npill:not(.ghost)").forEach(p=>p.classList.remove("active"));
-  document.getElementById(`tab-${name}-content`).classList.add("active");
-  document.getElementById(`tab-${name}`).classList.add("active");
+  const content = document.getElementById(`tab-${name}-content`);
+  const pill = document.getElementById(`tab-${name}`);
+  if (content) content.classList.add("active");
+  if (pill) pill.classList.add("active");
   if(name==="leaderboard") renderLeaderboard();
   if(name==="mybets") renderMyBets();
   if(name==="admin") renderAdmin();
+  if(name==="guess") initGuessWho();
 };
 
 function renderLeaderboard() {
