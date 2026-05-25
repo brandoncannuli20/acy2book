@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -1228,7 +1229,222 @@ fbSet(`/users/${currentUser.name}`,{name:currentUser.name,balance:STARTING_BAL,j
 toast(`Welcome back, ${currentUser.name}!`);
 });
 }
-</script>
 
+// ─── GUESS WHO ────────────────────────────────────────────────────────────────
+const GW_CLOUD  = “db8nacdzf”;
+const GW_PRESET = “ml_default”;
+let gwPhotos = {};
+let gwGame   = null;
+let gwInited = false;
+
+async function initGuessWho() {
+const snap = await fbGet(”/gw/photos”);
+gwPhotos = snap || {};
+if (!gwInited) {
+gwInited = true;
+onValue(ref(db,”/gw/chat”), snap2 => {
+const msgs = snap2.val() || {};
+const sorted = Object.values(msgs).sort((a,b)=>a.ts-b.ts);
+const container = document.getElementById(“chat-messages”);
+if (!container) return;
+container.innerHTML = sorted.map(m => {
+const isMine = m.sender===currentUser?.name;
+if (m.type===“system”) return `<div class="chat-msg system"><div class="chat-bubble system">${escapeHtml(m.text)}</div></div>`;
+return `<div class="chat-msg ${isMine?"mine":"theirs"}">${!isMine?`<div class="chat-name">${escapeHtml(m.sender)}</div>`:""}<div class="chat-bubble">${escapeHtml(m.text)}</div><div class="chat-time">${timeAgo(m.ts)}</div></div>`;
+}).join(””);
+container.scrollTop = container.scrollHeight;
+});
+onValue(ref(db,”/gw/game”), snap3 => {
+gwGame = snap3.val() || null;
+if (gwGame && currentUser) fbSet(`/gw/game/players/${currentUser.name}`, true);
+gwRenderBoard(); gwRenderControls(); gwUpdateStatus();
+});
+const inp = document.getElementById(“gwPhotoInput”);
+if (inp) inp.onchange = e => window.handlePhotoUpload(e.target.files);
+const ci = document.getElementById(“chatInput”);
+if (ci) ci.onkeydown = e => { if(e.key===“Enter”) window.sendChat(); };
+}
+gwRenderBoard(); gwRenderControls(); gwUpdateStatus();
+}
+
+function gwUpdateStatus() {
+const el=document.getElementById(“gw-status”), lbl=document.getElementById(“gw-board-label”), mys=document.getElementById(“gw-mystery-status”);
+if(!el) return;
+const g=gwGame, pc=Object.keys(gwPhotos).length;
+if(!g||!g.status||g.status===“setup”){el.textContent=`${pc} people in pool`;if(lbl)lbl.textContent=””;if(mys)mys.textContent=””;}
+else if(g.status===“picking”){el.textContent=“Picking mystery people…”;if(mys)mys.textContent=””;}
+else if(g.status===“active”){
+const bi=g.boardIds||[],me=g.eliminated?.[currentUser?.name]||[];
+if(lbl)lbl.textContent=`${bi.length-me.length} remaining`;
+el.textContent=“🔴 Game in progress”;
+const mp=g.picks?.[currentUser?.name];
+if(mys){mys.textContent=mp?`🎯 Your mystery: ${gwPhotos[mp]?.name||"?"}`:””;}
+if(mys&&mp) mys.style.color=“var(–gold)”;
+}
+else if(g.status===“won”){el.textContent=`🏆 ${g.winner} won!`;if(mys)mys.textContent=””;}
+}
+
+function gwRenderBoard() {
+const board=document.getElementById(“gw-board”);
+if(!board) return;
+const g=gwGame;
+if(!g||!g.status||g.status===“setup”){
+const photos=Object.values(gwPhotos);
+board.innerHTML=photos.length
+?photos.map(p=>`<div class="photo-card" style="cursor:default"><img src="${p.url}" loading="lazy" onerror="this.style.display='none'"><div class="photo-name">${escapeHtml(p.name)}</div></div>`).join(””)
+:`<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:13px">No photos yet.<br>Admin can upload via Manage Photos.</div>`;
+return;
+}
+const bi=g.boardIds||[], me=g.eliminated?.[currentUser?.name]||[];
+board.innerHTML=bi.map(pid=>{
+const p=gwPhotos[pid];
+if(!p) return `<div class="photo-card empty-card">?</div>`;
+const isE=me.includes(pid), isW=g.status===“won”&&g.mysteryId===pid;
+return `<div class="photo-card ${isE?"eliminated":""} ${isW?"mystery-reveal":""}" onclick="window.gwTapCard('${escapeAttr(pid)}')"><img src="${p.url}" loading="lazy" onerror="this.style.display='none'"><div class="photo-name">${escapeHtml(p.name)}</div></div>`;
+}).join(””);
+}
+
+function gwRenderControls() {
+const el=document.getElementById(“gw-controls”);
+if(!el) return;
+const g=gwGame, isAdmin=currentUser?.isAdmin;
+let html=””;
+if(!g||!g.status||g.status===“setup”){
+if(isAdmin){html+=`<button class="gw-btn green" onclick="window.gwStartGame()">🎲 Start New Game</button><button class="gw-btn ghost" onclick="window.gwToggleUpload()">📸 Manage Photos</button>`;}
+else html+=`<span style="font-size:12px;color:var(--muted)">Waiting for admin to start a game...</span>`;
+} else if(g.status===“picking”){
+const hp=g.picks?.[currentUser?.name];
+if(!hp) html+=`<button class="gw-btn gold" onclick="window.gwShowPick()">🎯 Pick Your Mystery Person</button>`;
+else html+=`<span style="font-size:12px;color:var(--green)">✓ You picked! Waiting for others...</span>`;
+if(isAdmin) html+=`<button class="gw-btn green" onclick="window.gwBegin()">▶ Begin Guessing</button>`;
+const waiting=Object.keys(g.players||{}).filter(n=>!(g.picks||{})[n]);
+if(waiting.length) html+=`<span style="font-size:11px;color:var(--muted);width:100%">Waiting: ${waiting.map(escapeHtml).join(", ")}</span>`;
+} else if(g.status===“active”){
+html+=`<button class="gw-btn gold" onclick="window.gwShowGuess()">🤔 Make a Guess</button>`;
+html+=`<button class="gw-btn ghost" onclick="window.gwResetBoard()">↺ Reset My Board</button>`;
+if(isAdmin) html+=`<button class="gw-btn red" onclick="window.gwEndGame()">✕ End Game</button>`;
+} else if(g.status===“won”){
+html+=`<span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;color:var(--gold)">🏆 ${escapeHtml(g.winner||"")} won!</span>`;
+if(isAdmin) html+=`<button class="gw-btn green" onclick="window.gwStartGame()">🎲 New Game</button>`;
+}
+el.innerHTML=html;
+}
+
+window.gwToggleUpload = function() {
+const sec=document.getElementById(“gw-upload-section”);
+if(!sec) return;
+const open=sec.style.display!==“none”;
+sec.style.display=open?“none”:“block”;
+if(!open) gwRenderPhotoManage();
+};
+
+function gwRenderPhotoManage() {
+const el=document.getElementById(“gw-photo-manage”);
+if(!el) return;
+const photos=Object.values(gwPhotos);
+el.innerHTML=photos.length
+?`<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;font-weight:600">${photos.length} people uploaded</div>`+
+photos.map(p=>`<div class="photo-manage-row"><img src="${p.url}" onerror="this.style.display='none'"><input class="text-input" value="${escapeAttr(p.name)}" onchange="window.gwRenamePerson('${escapeAttr(p.id)}',this.value)" placeholder="Name"><button onclick="window.gwDeletePerson('${escapeAttr(p.id)}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:18px;padding:4px;flex-shrink:0">x</button></div>`).join(””)
+:`<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px">No photos yet.</div>`;
+}
+
+window.handlePhotoUpload = async function(files) {
+if(!files?.length) return;
+toast(“Uploading “ + files.length + “ photo” + (files.length>1?“s”:””) + “…”);
+let n=0;
+for(const file of Array.from(files)){
+try{
+const fd=new FormData(); fd.append(“file”,file); fd.append(“upload_preset”,GW_PRESET);
+const res=await fetch(“https://api.cloudinary.com/v1_1/”+GW_CLOUD+”/image/upload”,{method:“POST”,body:fd});
+const data=await res.json();
+if(!data.secure_url) throw new Error(“no url”);
+const id=“photo_”+Date.now()+”*”+Math.random().toString(36).substr(2,5);
+const name=file.name.replace(/[.][^.]+$/, “”).replace(/[-*]/g,” “);
+await fbSet(”/gw/photos/”+id,{id,url:data.secure_url,name,by:currentUser.name,at:Date.now()});
+gwPhotos[id]={id,url:data.secure_url,name}; n++;
+} catch(e){console.error(e);toast(“Failed to upload a photo”,true);}
+}
+toast(n+” photo”+(n!==1?“s”:””)+” uploaded!”);
+gwRenderPhotoManage(); gwRenderBoard(); gwUpdateStatus();
+};
+
+window.gwRenamePerson = async function(id,name){await fbSet(”/gw/photos/”+id+”/name”,name);if(gwPhotos[id])gwPhotos[id].name=name;gwRenderBoard();};
+window.gwDeletePerson = async function(id){if(!confirm(“Delete this photo?”))return;await fbSet(”/gw/photos/”+id,null);delete gwPhotos[id];gwRenderPhotoManage();gwRenderBoard();gwUpdateStatus();};
+
+window.gwStartGame = async function() {
+const ids=Object.keys(gwPhotos);
+if(ids.length<4){toast(“Need at least 4 photos”,true);return;}
+const shuffled=[…ids].sort(()=>Math.random()-.5).slice(0,Math.min(24,ids.length));
+await fbSet(”/gw/game”,{status:“picking”,boardIds:shuffled,players:{},picks:{},eliminated:{},startedAt:Date.now(),startedBy:currentUser.name});
+await gwPost(“🎮 “+currentUser.name+” started a new game! Everyone pick your mystery person.”,“system”);
+};
+
+function gwShowModal(title,subtitle,opts,mode){
+let modal=document.getElementById(“gwModal”);
+if(!modal){modal=document.createElement(“div”);modal.id=“gwModal”;modal.style.cssText=“position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:650;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)”;document.body.appendChild(modal);}
+const btnLabel=mode===“pick”?“Set Mystery”:“Guess!”;
+const icon=mode===“pick”?“🎯”:“🤔”;
+modal.innerHTML=”<div style='background:var(--dark);border:1px solid var(--gold);border-radius:16px;padding:24px;max-width:340px;width:90%;text-align:center'><div style='font-size:36px;margin-bottom:8px'>”+icon+”</div><div style='font-family:Barlow Condensed,sans-serif;font-weight:900;font-size:20px;margin-bottom:6px'>”+title+”</div><div style='color:var(--muted);font-size:13px;margin-bottom:10px'>”+subtitle+”</div><select id='gwModalSel' style='width:100%;background:var(--pill);border:1px solid var(--border);color:var(--text);font-size:15px;padding:10px;border-radius:8px;outline:none;margin:10px 0'>”+opts+”</select><div style='display:flex;gap:8px;margin-top:4px'><button class='gw-btn ghost' style='flex:1' onclick="document.getElementById('gwModal').style.display='none'">Cancel</button><button class=‘gw-btn green’ style=‘flex:1’ onclick=“window.gwSubmit(’”+mode+”’)”>”+btnLabel+”</button></div></div>”;
+modal.style.display=“flex”;
+}
+
+window.gwShowPick = function(){
+const g=gwGame;if(!g)return;
+const opts=(g.boardIds||[]).map(function(id){const p=gwPhotos[id];return p?”<option value='"+escapeAttr(id)+"'>”+escapeHtml(p.name)+”</option>”:””}).join(””);
+gwShowModal(“🎯 Pick Your Mystery Person”,“Others will try to guess who you picked!”,opts,“pick”);
+};
+window.gwShowGuess = function(){
+const g=gwGame;if(!g)return;
+const me=g.eliminated?.[currentUser?.name]||[];
+const rem=(g.boardIds||[]).filter(function(id){return !me.includes(id);});
+const opts=rem.map(function(id){const p=gwPhotos[id];return p?”<option value='"+escapeAttr(id)+"'>”+escapeHtml(p.name)+”</option>”:””}).join(””);
+gwShowModal(“🤔 Make Your Guess”,“Who is the mystery person?”,opts,“guess”);
+};
+
+window.gwSubmit = async function(mode){
+const sel=document.getElementById(“gwModalSel”);if(!sel)return;
+const val=sel.value;document.getElementById(“gwModal”).style.display=“none”;
+const g=gwGame;
+if(mode===“pick”){
+await fbSet(”/gw/game/picks/”+currentUser.name,val);
+await gwPost(“🎯 “+currentUser.name+” has picked their mystery person.”,“system”);
+toast(“Mystery set: “+(gwPhotos[val]?.name||”?”));
+} else {
+const picks=g.picks||{};
+const te=Object.entries(picks).find(function(e){return e[0]!==currentUser.name;});
+if(!te){toast(“No target!”,true);return;}
+const targetId=te[1],correct=val===targetId,gn=gwPhotos[val]?.name||”?”;
+if(correct){
+await fbSet(”/gw/game/status”,“won”);
+await fbSet(”/gw/game/winner”,currentUser.name);
+await fbSet(”/gw/game/mysteryId”,targetId);
+await gwPost(“🏆 “+currentUser.name+” guessed correctly — it was “+(gwPhotos[targetId]?.name||”?”)+”! “+currentUser.name+” wins!”,“system”);
+} else {
+await gwPost(“❌ “+currentUser.name+” guessed “+gn+”… WRONG!”,“system”);
+toast(“Wrong guess!”);
+}
+}
+};
+
+window.gwBegin = async function(){await fbSet(”/gw/game/status”,“active”);await gwPost(“🎮 Game is live! Ask yes/no questions and tap cards to eliminate.”,“system”);};
+window.gwTapCard = function(pid){
+const g=gwGame;if(!g||g.status!==“active”)return;
+const me=[…(g.eliminated?.[currentUser?.name]||[])];
+const idx=me.indexOf(pid);if(idx>=0)me.splice(idx,1);else me.push(pid);
+fbSet(”/gw/game/eliminated/”+currentUser.name,me);
+};
+window.gwResetBoard = function(){fbSet(”/gw/game/eliminated/”+currentUser.name,[]);toast(“Board reset!”);};
+window.gwEndGame = async function(){if(!confirm(“End game?”))return;await fbSet(”/gw/game/status”,“setup”);await gwPost(“Game ended by admin.”,“system”);};
+window.sendChat = async function(){
+const input=document.getElementById(“chatInput”);if(!input)return;
+const text=input.value.trim();if(!text)return;
+input.value=””;await gwPost(text,“user”);
+};
+async function gwPost(text,type){
+const id=“msg_”+Date.now()+”_”+Math.random().toString(36).substr(2,5);
+await fbSet(”/gw/chat/”+id,{id,text,sender:type===“system”?“system”:currentUser.name,type,ts:Date.now()});
+}
+
+</script>
 </body>
 </html>
