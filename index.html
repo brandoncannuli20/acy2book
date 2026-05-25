@@ -255,7 +255,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
     <input class="text-input" id="loginName" placeholder="Enter your name to play..." maxlength="30">
     <label class="field-label" style="margin-top:4px">Admin Code <span style="color:#2a2a3d">(optional)</span></label>
     <input class="text-input" id="loginAdmin" type="password" placeholder="Leave blank if not admin">
-    <button class="place-btn" style="margin-top:4px" onclick="doLogin()">Enter the Book</button>
+    <button class="place-btn" style="margin-top:4px" onclick="window.doLogin()">Enter the Book</button>
     <p style="color:#333;font-size:11px;margin-top:16px">Each player starts with $10,000 in fake money.<br>Bets are live and shared with everyone.</p>
   </div>
 </div>
@@ -264,20 +264,20 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
   <nav class="nav">
     <div class="logo" onclick="scrollTo({top:0,behavior:'smooth'})">ACY<span>2</span>BOOK</div>
     <div class="nav-pills">
-      <button class="npill active" id="tab-board" onclick="setTab('board')">Board</button>
-      <button class="npill" id="tab-leaderboard" onclick="setTab('leaderboard')">🏆</button>
-      <button class="npill" id="tab-mybets" onclick="setTab('mybets')">My Bets</button>
-      <button class="npill" id="tab-admin" onclick="setTab('admin')" style="display:none">⚙️</button>
-      <button class="npill" id="tab-guess" onclick="setTab('guess')">🎮</button>
-      <button class="npill ghost" onclick="doLogout()">⇄</button>
+      <button class="npill active" id="tab-board" onclick="window.setTab('board')">Board</button>
+      <button class="npill" id="tab-leaderboard" onclick="window.setTab('leaderboard')">🏆</button>
+      <button class="npill" id="tab-mybets" onclick="window.setTab('mybets')">My Bets</button>
+      <button class="npill" id="tab-admin" onclick="window.setTab('admin')" style="display:none">⚙️</button>
+      <button class="npill" id="tab-guess" onclick="window.setTab('guess')">🎮</button>
+      <button class="npill ghost" onclick="window.doLogout()">⇄</button>
     </div>
     <div class="live-badge"><div class="live-dot"></div>LIVE</div>
   </nav>
 
   <div id="installBanner" style="display:none" class="install-banner">
     <div class="install-banner-text"><strong>📲 Add to Home Screen</strong>Install ACY2Book as an app</div>
-    <button class="install-btn" onclick="installApp()">Install</button>
-    <button class="install-close" onclick="dismissInstall()">×</button>
+    <button class="install-btn" onclick="window.installApp()">Install</button>
+    <button class="install-close" onclick="window.dismissInstall()">×</button>
   </div>
 
   <div class="ticker-wrap">
@@ -357,24 +357,24 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
       <div class="admin-card" style="border-color:rgba(255,59,48,.3);background:#1a0a0a">
         <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;margin-bottom:4px;color:var(--red)">Reset Everything</div>
         <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Wipes all bets, balances, and player statuses. Cannot be undone.</div>
-        <button class="admin-btn red" onclick="confirmReset()">🗑️ Reset All Data</button>
+        <button class="admin-btn red" onclick="window.confirmReset()">🗑️ Reset All Data</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="slip-float" id="slipFloat" onclick="openDrawer()" style="display:none">
+<div class="slip-float" id="slipFloat" onclick="window.openDrawer()" style="display:none">
   🎟️ BET SLIP <div class="slip-count" id="slipCount">0</div>
 </div>
 
-<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="overlay" id="overlay" onclick="window.closeDrawer()"></div>
 <div class="drawer" id="drawer">
-  <div class="drawer-handle" onclick="closeDrawer()"></div>
+  <div class="drawer-handle" onclick="window.closeDrawer()"></div>
   <div class="drawer-header">
     <div class="drawer-title">🎟️ Bet Slip</div>
     <div style="display:flex;align-items:center;gap:10px">
       <span style="font-size:12px;color:var(--muted)">Balance: <strong id="drawerBal" style="color:var(--green)">$10,000</strong></span>
-      <button class="drawer-close" onclick="closeDrawer()">×</button>
+      <button class="drawer-close" onclick="window.closeDrawer()">×</button>
     </div>
   </div>
   <div class="drawer-body" id="drawerBody"></div>
@@ -382,8 +382,8 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
     <div class="total-row"><span class="lbl">Total Wagered</span><span class="val" id="totalWagered">$0</span></div>
     <div class="total-row"><span class="lbl">Est. Payout</span><span class="val" style="color:var(--green)" id="totalPayout">$0</span></div>
     <div id="balWarning" style="color:var(--red);font-size:12px;display:none">⚠️ Exceeds your balance</div>
-    <button class="place-btn" id="placeBtn" onclick="placeBets()">Place Bets</button>
-    <button class="clear-btn" onclick="clearSlip()">Remove All Selections</button>
+    <button class="place-btn" id="placeBtn" onclick="window.placeBets()">Place Bets</button>
+    <button class="clear-btn" onclick="window.clearSlip()">Remove All Selections</button>
   </div>
 </div>
 
@@ -392,7 +392,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
     <div style="font-size:48px;margin-bottom:12px">✅</div>
     <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;margin-bottom:8px" id="modalTitle">Bets Placed!</div>
     <div style="color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:20px" id="modalText"></div>
-    <button class="modal-btn" onclick="closeModal()">Back to Board</button>
+    <button class="modal-btn" onclick="window.closeModal()">Back to Board</button>
   </div>
 </div>
 
@@ -628,7 +628,7 @@ function buildCard(p) {
 
   let propsHtml="";
   if(p.props?.length) {
-    propsHtml=p.props.map(pr=>`<div class="prop-row" onclick="addToSlip('${p.name}','${pr.label.replace(/'/g,"\\'")}','${pr.odds}','${pr.type}','${p.id}')"><span class="prop-label">${pr.label}</span><span class="prop-odds ${pr.type}">${pr.odds}</span></div>`).join("");
+    propsHtml=p.props.map(pr=>`<div class="prop-row" onclick="window.addToSlip('${p.name}','${pr.label.replace(/'/g,"\\'")}','${pr.odds}','${pr.type}','${p.id}')"><span class="prop-label">${pr.label}</span><span class="prop-odds ${pr.type}">${pr.odds}</span></div>`).join("");
   }
 
   const clickAction = isDead
@@ -638,7 +638,7 @@ function buildCard(p) {
     : `event.stopPropagation();addToSlip('${p.name}','To Depart','${p.display}','${p.type}','${p.id}')`;
 
   div.innerHTML=`
-    <div class="card-main" onclick="toggleCard('${p.id}')">
+    <div class="card-main" onclick="window.toggleCard('${p.id}')">
       <div class="avatar">${p.initials}<div class="status-dot ${p.dotClass}"></div></div>
       <div class="player-info">
         <div class="player-name">${p.name}${isLock?" 🔒":""}${isSyd?" ⭐":""}</div>
@@ -649,7 +649,7 @@ function buildCard(p) {
         <div class="odds-num" id="onum-${p.id}" ${oddsNumStyle}>${p.display}</div>
       </div>
     </div>
-    <button class="expand-toggle" onclick="toggleCard('${p.id}')">${isSyd?"▾ Full Analysis":"▾ Analysis"}</button>
+    <button class="expand-toggle" onclick="window.toggleCard('${p.id}')">${isSyd?"▾ Full Analysis":"▾ Analysis"}</button>
     <div class="card-expand">
       <div class="analysis-text" id="analysis-${p.id}">${p.analysis}</div>
       ${propsHtml?`<div>${propsHtml}</div>`:""}
@@ -763,7 +763,7 @@ function renderAdmin() {
         <div style="font-size:11px;color:var(--muted)">${openBets.length} open bets · ${fmtMoney(stake)} at stake</div></div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;color:${p.type==="neg"?"var(--red)":"var(--green)"}">${p.display}</div>
       </div>
-      <button class="admin-btn red" onclick="gradePlayer('${p.id}')">✓ Mark Departed — Pay Out Bets</button>
+      <button class="admin-btn red" onclick="window.gradePlayer('${p.id}')">✓ Mark Departed — Pay Out Bets</button>
     </div>`;
   }).join("");
 
@@ -772,7 +772,7 @@ function renderAdmin() {
       <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;margin-bottom:8px">${p.name} <span style="color:var(--muted);font-weight:400;font-size:13px">current: ${p.display}</span></div>
       <div style="display:flex;gap:8px">
         <input class="text-input" style="flex:1;margin-bottom:0" id="newodds-${p.id}" placeholder="e.g. -550 or +300">
-        <button class="admin-btn gold" onclick="adminUpdateOdds('${p.id}')">Update</button>
+        <button class="admin-btn gold" onclick="window.adminUpdateOdds('${p.id}')">Update</button>
       </div>
     </div>`).join("");
 
@@ -783,7 +783,7 @@ function renderAdmin() {
       <textarea class="text-input" id="notes-${p.id}" rows="3" placeholder="e.g. Had informational with Brian, Brian talked about himself the whole time, line dropping" style="resize:none;margin-bottom:6px"></textarea>
 
 ```
-  <button class="admin-btn gold" id="notesbtn-${p.id}" onclick="adminUpdateAnalysis('${p.id}')">✨ Generate & Publish</button>
+  <button class="admin-btn gold" id="notesbtn-${p.id}" onclick="window.adminUpdateAnalysis('${p.id}')">✨ Generate & Publish</button>
 </div>`).join("");
 ```
 
@@ -923,7 +923,7 @@ return;
 footer.style.display=“block”;
 
 if(!partial){
-body.innerHTML=slip.map((b,i)=>` <div class="slip-item"> <button class="slip-remove" onclick="removeFromSlip(${i})">×</button> <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px"> <div><div class="slip-name">${b.name}</div><div class="slip-market">${b.market}</div></div> <div class="slip-odds-val ${b.type}">${b.odds}</div> </div> <div style="display:flex;align-items:center;gap:8px;margin-top:8px"> <span style="font-size:11px;color:var(--muted);white-space:nowrap">Wager $</span> <input class="amt-input" type="number" min="1" value="${b.amount}" oninput="updateAmt(${i},this.value)"> </div> <div class="quick-amts"> <button class="qamt" onclick="setAmt(${i},10)">$10</button> <button class="qamt" onclick="setAmt(${i},50)">$50</button> <button class="qamt" onclick="setAmt(${i},100)">$100</button> <button class="qamt" onclick="setAmt(${i},500)">$500</button> </div> <div class="slip-payout" id="slippay-${i}">Est. return: ${fmtMoney(calcPayout(b.amount,b.odds))}</div> </div>`).join(””);
+body.innerHTML=slip.map((b,i)=>` <div class="slip-item"> <button class="slip-remove" onclick="window.removeFromSlip(${i})">×</button> <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px"> <div><div class="slip-name">${b.name}</div><div class="slip-market">${b.market}</div></div> <div class="slip-odds-val ${b.type}">${b.odds}</div> </div> <div style="display:flex;align-items:center;gap:8px;margin-top:8px"> <span style="font-size:11px;color:var(--muted);white-space:nowrap">Wager $</span> <input class="amt-input" type="number" min="1" value="${b.amount}" oninput="window.updateAmt(${i},this.value)"> </div> <div class="quick-amts"> <button class="qamt" onclick="window.setAmt(${i},10)">$10</button> <button class="qamt" onclick="window.setAmt(${i},50)">$50</button> <button class="qamt" onclick="window.setAmt(${i},100)">$100</button> <button class="qamt" onclick="window.setAmt(${i},500)">$500</button> </div> <div class="slip-payout" id="slippay-${i}">Est. return: ${fmtMoney(calcPayout(b.amount,b.odds))}</div> </div>`).join(””);
 } else {
 slip.forEach((b,i)=>{
 const el=document.getElementById(`slippay-${i}`);
@@ -1080,7 +1080,7 @@ const p = photos[pid];
 if (!p) return “”;
 const isElim = myEliminated.includes(pid);
 const isMystery = game.status === “won” && game.mysteryId === pid;
-return `<div class="photo-card ${isElim?"eliminated":""} ${isMystery?"mystery-reveal":""}" onclick="gwToggleCard('${pid}')"> <img src="${p.url}" loading="lazy"> <div class="photo-name">${p.name}</div> </div>`;
+return `<div class="photo-card ${isElim?"eliminated":""} ${isMystery?"mystery-reveal":""}" onclick="window.gwToggleCard('${pid}')"> <img src="${p.url}" loading="lazy"> <div class="photo-name">${p.name}</div> </div>`;
 }).join(””);
 }
 
@@ -1094,30 +1094,30 @@ let html = “”;
 
 if (!game || game.status === “setup”) {
 if (isAdmin) {
-html += `<button class="gw-btn green" onclick="gwStartGame()">🎲 Start New Game</button>`;
-html += `<button class="gw-btn ghost" onclick="gwToggleUpload()">📸 Manage Photos</button>`;
+html += `<button class="gw-btn green" onclick="window.gwStartGame()">🎲 Start New Game</button>`;
+html += `<button class="gw-btn ghost" onclick="window.gwToggleUpload()">📸 Manage Photos</button>`;
 } else {
 html += `<div style="font-size:12px;color:var(--muted);padding:4px 0">Waiting for admin to start a game...</div>`;
 }
 } else if (game.status === “picking”) {
 const hasPicked = game.picks?.[currentUser.name];
 if (!hasPicked) {
-html += `<button class="gw-btn gold" onclick="gwShowPickModal()">🎯 Pick Your Mystery Person</button>`;
+html += `<button class="gw-btn gold" onclick="window.gwShowPickModal()">🎯 Pick Your Mystery Person</button>`;
 html += `<div style="font-size:11px;color:var(--muted);padding:4px 0">Pick your mystery person — others will try to guess who it is</div>`;
 } else {
 html += `<div style="font-size:12px;color:var(--green);padding:4px 0">✓ You picked your mystery person. Waiting for others...</div>`;
 }
 if (isAdmin) {
 const allPicked = Object.keys(game.picks||{}).length >= (game.players||[]).length;
-html += `<button class="gw-btn green" onclick="gwBeginGuessing()" ${allPicked?'':'style="opacity:.5"'}>▶ Begin Guessing${allPicked?'':' (waiting for picks)'}</button>`;
+html += `<button class="gw-btn green" onclick="window.gwBeginGuessing()" ${allPicked?'':'style="opacity:.5"'}>▶ Begin Guessing${allPicked?'':' (waiting for picks)'}</button>`;
 }
 } else if (game.status === “active”) {
-html += `<button class="gw-btn gold" onclick="gwShowGuessModal()">🤔 Make a Guess</button>`;
-html += `<button class="gw-btn ghost" onclick="gwResetMyBoard()">↺ Reset My Board</button>`;
-if (isAdmin) html += `<button class="gw-btn red" onclick="gwEndGame()">✕ End Game</button>`;
+html += `<button class="gw-btn gold" onclick="window.gwShowGuessModal()">🤔 Make a Guess</button>`;
+html += `<button class="gw-btn ghost" onclick="window.gwResetMyBoard()">↺ Reset My Board</button>`;
+if (isAdmin) html += `<button class="gw-btn red" onclick="window.gwEndGame()">✕ End Game</button>`;
 } else if (game.status === “won”) {
 html += `<div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;color:var(--gold)">🏆 ${game.winner} won!</div>`;
-if (isAdmin) html += `<button class="gw-btn green" onclick="gwStartGame()">🎲 New Game</button>`;
+if (isAdmin) html += `<button class="gw-btn green" onclick="window.gwStartGame()">🎲 New Game</button>`;
 }
 
 controls.innerHTML = html;
@@ -1145,7 +1145,7 @@ const photos = Object.values(gwState.photos);
 const el = document.getElementById(“gw-photo-manage”);
 if (!photos.length) { el.innerHTML = `<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px">No photos yet. Upload some above.</div>`; return; }
 el.innerHTML = `<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;font-weight:600">${photos.length} people uploaded</div>` +
-photos.map(p => ` <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)"> <img src="${p.url}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0"> <input class="text-input" style="flex:1;margin-bottom:0;padding:5px 10px;font-size:13px" value="${p.name}"  onchange="gwUpdatePhotoName('${p.id}', this.value)" placeholder="Enter name"> <button onclick="gwDeletePhoto('${p.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;padding:4px">✕</button> </div>`).join(””);
+photos.map(p => ` <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)"> <img src="${p.url}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0"> <input class="text-input" style="flex:1;margin-bottom:0;padding:5px 10px;font-size:13px" value="${p.name}"  onchange="window.gwUpdatePhotoName('${p.id}', this.value)" placeholder="Enter name"> <button onclick="window.gwDeletePhoto('${p.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;padding:4px">✕</button> </div>`).join(””);
 }
 
 const CLOUDINARY_CLOUD = “db8nacdzf”;
