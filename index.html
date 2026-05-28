@@ -547,10 +547,32 @@ function canonicalName(name) {
   const aliases = {
     "sydney": "Syd",
     "syd": "Syd",
+
+    "hetvi": "Hetvi",
+
     "brandon cannuli": "Brandon",
-    "brandon": "Brandon"
+    "brandon": "Brandon",
+
+    "cass": "Cass",
+    "cassandra": "Cass",
+
+    "david": "David",
+    "randy": "Randy",
+    "randolph": "Randy",
+    "rich": "Rich",
+    "kurt": "Kurt",
+    "colin": "Colin",
+    "kate": "Kate"
   };
-  return aliases[key] || clean;
+
+  if (aliases[key]) return aliases[key];
+
+  // Default: title-case each word, so "john smith" becomes "John Smith"
+  return clean
+    .split(" ")
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(" ");
 }
 
 function toast(msg, red=false) {
@@ -876,7 +898,7 @@ if (adminUsersEl) {
           <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px">${escapeHtml(u.name)}</div>
           <div style="font-size:11px;color:var(--muted)">Balance: ${fmtMoney(u.balance ?? STARTING_BAL)} · ${ub.length} bet${ub.length!==1?"s":""}</div>
         </div>
-        <button class="admin-btn red" onclick="window.adminDeleteUser('${escapeAttr(u.name)}')">Remove</button>
+        <button class="admin-btn red" onclick='window.adminDeleteUser(${JSON.stringify(u.name)})'>Remove</button>
       </div>
     </div>`;
   }).join("") : `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No players yet.</div>`;
@@ -907,6 +929,48 @@ updates[`/players/${playerId}`]={id:playerId,status:"departed",odds:p.odds,displ
 await fbUpdate("/", updates);
 toast(`✓ ${p.name} marked departed. ${Object.keys(winnerMap).length} winner${Object.keys(winnerMap).length!==1?"s":""} paid out!`);
 }
+
+
+window.adminDeleteUser = async function(userName) {
+  if (!currentUser?.isAdmin) {
+    toast("Admin only", true);
+    return;
+  }
+
+  const safeName = String(userName || "").trim();
+  if (!safeName) {
+    toast("No player selected", true);
+    return;
+  }
+
+  if (!confirm(`Remove ${safeName} from ACY2Book? This will also remove their bets.`)) return;
+
+  try {
+    const updates = {};
+    updates[`/users/${safeName}`] = null;
+
+    Object.values(state.bets || {}).forEach(b => {
+      if (b.userName === safeName) {
+        updates[`/bets/${b.id}`] = null;
+      }
+    });
+
+    await fbUpdate("/", updates);
+
+    if (currentUser?.name === safeName) {
+      lsClear();
+      currentUser = null;
+      location.reload();
+      return;
+    }
+
+    toast(`Removed ${safeName}`);
+    renderAdmin();
+  } catch (err) {
+    console.error("Failed to remove player", err);
+    toast("Remove failed - check Firebase permissions/rules", true);
+  }
+};
 
 window.adminUpdateOdds = async function(playerId) {
 const input=document.getElementById(`newodds-${playerId}`);
