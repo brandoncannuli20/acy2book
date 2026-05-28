@@ -231,6 +231,10 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
 .upload-zone:hover,.upload-zone.drag{border-color:var(--green);}
 .upload-zone input{display:none;}
 
+
+.photo-manage-row{display:flex;align-items:center;gap:10px;margin:8px 14px;}
+.photo-manage-row img{width:54px;height:54px;object-fit:cover;border-radius:8px;flex-shrink:0;}
+
 /* GUESS MODAL */
 .guess-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .guess-modal.open{display:flex;}
@@ -354,6 +358,11 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
       <div id="admin-notes"></div>
       <div class="section-label" style="margin-top:8px">Book Stats <div style="flex:1;height:1px;background:var(--border)"></div></div>
       <div class="stat-grid" id="admin-stats"></div>
+      <div class="section-label" style="margin-top:8px">Manage Players <div style="flex:1;height:1px;background:var(--border)"></div></div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--muted)">
+        Use this if someone logs in with the wrong name. Deleting a player also deletes their bets.
+      </div>
+      <div id="admin-users"></div>
       <div class="section-label" style="margin-top:8px">Danger Zone <div style="flex:1;height:1px;background:var(--border)"></div></div>
       <div class="admin-card" style="border-color:rgba(255,59,48,.3);background:#1a0a0a">
         <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;margin-bottom:4px;color:var(--red)">Reset Everything</div>
@@ -531,6 +540,19 @@ function escapeAttr(s) {
 function escapeHtml(s) {
   return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 }
+
+function canonicalName(name) {
+  const clean = String(name || "").trim().replace(/\s+/g, " ");
+  const key = clean.toLowerCase();
+  const aliases = {
+    "sydney": "Syd",
+    "syd": "Syd",
+    "brandon cannuli": "Brandon",
+    "brandon": "Brandon"
+  };
+  return aliases[key] || clean;
+}
+
 function toast(msg, red=false) {
   const el=document.createElement("div");
   el.className="toast"+(red?" red":"");
@@ -592,7 +614,7 @@ function applyStoredPlayers() {
 
 // ─── LOGIN ────────────────────────────────────────────────────────────────────
 window.doLogin = async function() {
-  const name = document.getElementById("loginName").value.trim();
+  const name = canonicalName(document.getElementById("loginName").value);
   const code = document.getElementById("loginAdmin").value.trim().toUpperCase();
   if (!name) return;
 
@@ -842,6 +864,23 @@ document.getElementById("admin-stats").innerHTML=[
 {label:"Total Wagered",val:fmtMoney(totalWagered)},
 {label:"Open Bets",val:allBets.filter(b=>b.status==="open").length},
 ].map(s=>`<div class="stat-box"><div class="stat-label">${s.label}</div><div class="stat-val">${s.val}</div></div>`).join("");
+
+const userRows = Object.values(state.users||{}).sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+const adminUsersEl = document.getElementById("admin-users");
+if (adminUsersEl) {
+  adminUsersEl.innerHTML = userRows.length ? userRows.map(u=>{
+    const ub = allBets.filter(b=>b.userName===u.name);
+    return `<div class="admin-card" style="background:var(--card);border-color:var(--border)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px">${escapeHtml(u.name)}</div>
+          <div style="font-size:11px;color:var(--muted)">Balance: ${fmtMoney(u.balance ?? STARTING_BAL)} · ${ub.length} bet${ub.length!==1?"s":""}</div>
+        </div>
+        <button class="admin-btn red" onclick="window.adminDeleteUser('${escapeAttr(u.name)}')">Remove</button>
+      </div>
+    </div>`;
+  }).join("") : `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No players yet.</div>`;
+}
 }
 
 window.gradePlayer = async function(playerId) {
